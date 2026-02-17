@@ -1,3 +1,5 @@
+package src.GUI;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -31,7 +33,7 @@ class Calculator2 extends JFrame implements ActionListener {
 	String str_number = "";
 	
 	public Calculator2() {
-		JFrame frame = new JFrame("Simple Java Caculator");
+		JFrame frame = new JFrame("Simple Java Calculator");
 		frame.setSize(320,420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -98,7 +100,7 @@ class Calculator2 extends JFrame implements ActionListener {
 
 		txt.setEditable(false);
 		//btn_del.setEnabled(false);
-		HeadPanel.add(new JLabel("A Java Calculator"));
+		HeadPanel.add(new JLabel("A src.Java Calculator"));
 		frame.add(LabelPanel);
 		frame.add(NumberPanel);
 		frame.setVisible(true);
