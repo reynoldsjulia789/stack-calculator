@@ -4,7 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
  
-class Calculator2 extends JFrame implements ActionListener { 
+class CalculatorGUI extends JFrame implements ActionListener
+{
 
 	private static final long serialVersionUID = 1L;
 	JButton btn1 = new JButton("1");
@@ -32,7 +33,8 @@ class Calculator2 extends JFrame implements ActionListener {
 	JTextArea txt = new JTextArea();
 	String str_number = "";
 	
-	public Calculator2() {
+	public CalculatorGUI()
+	{
 		JFrame frame = new JFrame("Simple Java Calculator");
 		frame.setSize(320,420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,7 +108,8 @@ class Calculator2 extends JFrame implements ActionListener {
 		frame.setVisible(true);
 }
 	
-public void actionPerformed(ActionEvent e) {
+public void actionPerformed(ActionEvent e)
+{
 
 	if(e.getSource()==btn1) {
 		str_number+="1";
@@ -175,8 +178,9 @@ public void actionPerformed(ActionEvent e) {
 	}
 }
     
-	public static void main(String[] args) {
-		new Calculator2();
+	public static void main(String[] args)
+	{
+		new CalculatorGUI();
 	
 	}
 }
