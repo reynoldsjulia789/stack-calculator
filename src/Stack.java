@@ -1,0 +1,80 @@
+package src;
+
+public class Stack<Type>
+{
+    Node head;
+    int  size;
+
+    /**
+     * Inner node class for Stack
+     */
+    private class Node
+    {
+        Type data;
+        Node next;
+
+        /**
+         * Node constructor
+         * @param data the data to store
+         * @param next the next node in the Stack
+         */
+        private Node(Type data, Node next)
+        {
+            this.data = data;
+            this.next = next;
+        }
+    }
+
+    /**
+     * Constructs an empty stack with a dummy head node
+     */
+    public Stack()
+    {
+        this.head = new Node(null, null);
+        this.size = 0;
+    }
+
+    /**
+     * Returns the size of the stack
+     * @return number of elements in the stack
+     */
+    public int getSize()
+    {
+        return this.size;
+    }
+
+    /**
+     * Adds data to the top of the stack
+     * @param data the data to add to the stack, can be null
+     */
+    public void push(Type data)
+    {
+        this.head.next = new Node(data, this.head.next);
+    }
+
+    /**
+     * Removes the data from the top of the stack and returns it to the caller
+     * @return data at the top of the stack
+     */
+    public Type pop()
+    {
+        Node curr, prev;
+
+        curr = this.head.next;
+        prev = this.head;
+
+        prev.next = curr.next;
+
+        return curr.data;
+    }
+
+    /**
+     * Allows the caller to look at what is at the top of the stack without removing it from
+     *      the stack.
+     * @return the data at the top of the stack without removing it
+     */
+    public Type peek()
+    {
+        return this.head.next.data;
+    }
+}
