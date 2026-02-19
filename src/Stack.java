@@ -38,7 +38,7 @@ public class Stack<Type>
      * Returns the size of the stack
      * @return number of elements in the stack
      */
-    public int getSize()
+    public int size()
     {
         return this.size;
     }
@@ -50,6 +50,8 @@ public class Stack<Type>
     public void push(Type data)
     {
         this.head.next = new Node(data, this.head.next);
+
+        this.size++;
     }
 
     /**
@@ -64,6 +66,8 @@ public class Stack<Type>
         prev = this.head;
 
         prev.next = curr.next;
+
+        this.size--;
 
         return curr.data;
     }
