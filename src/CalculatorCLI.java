@@ -1,0 +1,59 @@
+package src;
+
+import java.util.Scanner;
+
+public class CalculatorCLI
+{
+    public static void main(String[] args)
+    {
+        int     result;
+        String  infixExpression, postfixExpression;
+        Scanner userInput;
+
+        // Welcome user
+        System.out.println("Welcome to the Stack Calculator!\r\n");
+
+        userInput = new Scanner(System.in);
+
+        while (true)
+        {
+            // Read inputted user expression
+            System.out.print("Please enter the infix expression to process:\t\t");
+            infixExpression = userInput.nextLine();
+
+            // Try to evaluate expression
+            try
+            {
+                // convert infix expression to postfix expression
+                postfixExpression = ExpressionOperations.convertToPostfix(infixExpression);
+
+                // Print postfix expression
+                System.out.println("The postfix expression for the input infix is:\t\t" + postfixExpression);
+
+                // Try to evaluate expression
+                result = ExpressionOperations.evaluatePostfixExpression(postfixExpression);
+
+                // Print results
+                System.out.println("The final result after evaluating the postfix is:\t" + result);
+
+                // Ask user if they would like to evaluate another expression
+                System.out.print("Do you have another expression you would like to process? (y/n)\t");
+                switch(userInput.nextLine().trim())
+                {
+                    case "y", "Y", "yes", "Yes", "YES":     System.out.println();
+                                                            break;
+
+                    case "n", "N", "no", "No", "NO":        System.out.println("\r\nThank you for using the Stack Calculator!");
+                                                            return;
+
+                    default:                                System.out.println("Please provide a y/n answer.");
+                }
+            }
+            catch (Exception caught)
+            {
+                System.out.print("There was an error evaluating your expression:");
+                System.out.println(caught.getMessage() + "\r\n");
+            }
+        }
+    }
+}
