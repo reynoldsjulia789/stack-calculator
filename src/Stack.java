@@ -62,6 +62,11 @@ public class Stack<Type>
     {
         Node curr, prev;
 
+        if (size == 0)
+        {
+            throw new IllegalArgumentException("nothing in the stack to pop");
+        }
+
         curr = this.head.next;
         prev = this.head;
 
@@ -79,6 +84,11 @@ public class Stack<Type>
      */
     public Type peek()
     {
+        if (size == 0)
+        {
+            throw new IllegalArgumentException("stack is empty");
+        }
+
         return this.head.next.data;
     }
 }

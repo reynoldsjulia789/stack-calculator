@@ -11,6 +11,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class StackTest
 {
     @Nested
+    class stackPushTests
+    {
+        @Test
+        @DisplayName("Pushes One Item")
+        public void addItem()
+        {
+            Stack<Integer> test = new Stack<>();
+
+            test.push(1);
+
+            assertEquals(1, test.peek());
+        }
+
+        @Test
+        @DisplayName("Pushes items correctly")
+        public void addMany()
+        {
+            Stack<Integer> test = new Stack<>();
+
+            test.push(1);
+            test.push(2);
+            test.push(3);
+
+            assertEquals(3, test.peek());
+        }
+    }
+
+    @Nested
     class stackSizeTests
     {
         @Test
@@ -49,7 +77,17 @@ public class StackTest
         @Test
         public void stackUpdatesSizeOnPop()
         {
+            Stack<Integer> test = new Stack<>();
 
+            test.push(1);
+            test.push(2);
+            test.push(3);
+            test.push(4);
+            test.push(5);
+
+            test.pop();
+
+            assertEquals(4, test.size());
         }
     }
 }
