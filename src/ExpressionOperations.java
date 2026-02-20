@@ -1,5 +1,10 @@
 package src;
 
+/**
+ * A collection of static methods that perform operations on arithmetic expressions,
+ * such as evaluating infix and postfix expressions and converting infix expressions to postfix expressions
+ * @author Julia Reynolds
+ */
 public class ExpressionOperations
 {
     /**
@@ -16,6 +21,7 @@ public class ExpressionOperations
         int              idx, right, left;
         Stack<Integer>   operands;
 
+        // verify expression exists and isn't blank
         if (postfixExpression == null || postfixExpression.isBlank())
         {
             throw new IllegalArgumentException("cannot evaluate null or blank expression");
@@ -115,14 +121,14 @@ public class ExpressionOperations
      * Converts an infix expression to a postfix expression
      * @param infixExpression expression must be in infix form
      * @return postfix expression as a String
-     * @throws IllegalArgumentException null expression passed, blank/empty String passed, invalid infix expression
+     * @throws IllegalArgumentException null expression passed or blank/empty String passed
      */
     public static String convertToPostfix(String infixExpression) throws IllegalArgumentException
     {
         Stack<Character> operators;
         StringBuilder    postfixExpression;
 
-        // verify expression exists
+        // verify expression exists and isn't blank
         if (infixExpression == null || infixExpression.isBlank())
         {
             throw new IllegalArgumentException("cannot evaluate null or blank infix expression");
