@@ -12,6 +12,8 @@ import javax.swing.*;
 class CalculatorGUI extends JFrame implements ActionListener
 {
 
+	private static Stack<Integer> charsAdded = new Stack<>();
+
 	private static final long serialVersionUID = 1L;
 
 	// Buttons
@@ -37,8 +39,9 @@ class CalculatorGUI extends JFrame implements ActionListener
 	JButton btn_pow 	= new JButton("^");
 	JButton btn_equ 	= new JButton("=");
 
-	// text area
-	JTextArea txt		= new JTextArea();
+	// text field
+	JTextField txt		  = new JTextField();
+	JTextField txtHistory = new JTextField();
 
 	// string builder to keep track of expression
 	StringBuilder str_number = new StringBuilder();
@@ -60,7 +63,7 @@ class CalculatorGUI extends JFrame implements ActionListener
 		HeadPanel.setBackground(Color.LIGHT_GRAY);
 		NumberPanel.setLayout(new GridLayout(5,4));
 		//LabelPanel.setLayout(new BorderLayout());
-		LabelPanel.setLayout(new GridLayout(1,1));
+		LabelPanel.setLayout(new GridLayout(2,1));
 		
 		NumberPanel.add(btn1);
 		btn1.addActionListener(this);
@@ -99,8 +102,6 @@ class CalculatorGUI extends JFrame implements ActionListener
 		NumberPanel.add(btn_div);
 		btn_div.addActionListener(this);
 
-		LabelPanel.add(txt);
-
 		NumberPanel.add(btn_lpr);
 		btn_lpr.addActionListener(this);
 		NumberPanel.add(btn_rpr);
@@ -110,7 +111,20 @@ class CalculatorGUI extends JFrame implements ActionListener
 		NumberPanel.add(btn_equ);
 		btn_equ.addActionListener(this);
 
+		txt.setFont(new Font("Arial", Font.BOLD, 14));
+		txt.setHorizontalAlignment(JTextField.CENTER);
 		txt.setEditable(false);
+		txt.setBorder(null);
+
+		txtHistory.setFont(new Font("Arial", Font.PLAIN, 10));
+		txtHistory.setForeground(Color.GRAY);
+		txtHistory.setHorizontalAlignment(JTextField.CENTER);
+		txtHistory.setEditable(false);
+		txtHistory.setBorder(null);
+
+		LabelPanel.add(txtHistory);
+		LabelPanel.add(txt);
+
 		//btn_del.setEnabled(false);
 		HeadPanel.add(new JLabel("Stack Calculator"));
 		frame.add(LabelPanel);
@@ -130,97 +144,115 @@ class CalculatorGUI extends JFrame implements ActionListener
 		{
 			str_number.append("1");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn2)
 		{
 			str_number.append("2");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn3)
 		{
 			str_number.append("3");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn4)
 		{
 			str_number.append("4");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn5)
 		{
 			str_number.append("5");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn6)
 		{
 			str_number.append("6");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn7)
 		{
 			str_number.append("7");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn8)
 		{
 			str_number.append("8");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn9)
 		{
 			str_number.append("9");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn0)
 		{
 			str_number.append("0");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn_lpr)
 		{
-			str_number.append("( ");
+			str_number.append(" ( ");
 			txt.setText(str_number.toString());
+			charsAdded.push(3);
 		}
 		else if (e.getSource() == btn_rpr)
 		{
-			str_number.append(" )");
+			str_number.append(" ) ");
 			txt.setText(str_number.toString());
+			charsAdded.push(3);
 		}
 		else if (e.getSource() == btn_pow)
 		{
 			str_number.append(" ^ ");
 			txt.setText(str_number.toString());
+			charsAdded.push(3);
 		}
 		else if (e.getSource() == btn_add)
 		{
 			str_number.append(" + ");
 			txt.setText(str_number.toString());
+			charsAdded.push(3);
 		}
 		else if (e.getSource() == btn_sub)
 		{
 			str_number.append(" - ");
 			txt.setText(str_number.toString());
+			charsAdded.push(3);
 		}
 		else if (e.getSource() == btn_mult)
 		{
 			str_number.append(" * ");
 			txt.setText(str_number.toString());
+			charsAdded.push(3);
 		}
 		else if (e.getSource() == btn_div)
 		{
 			str_number.append(" / ");
 			txt.setText(str_number.toString());
+			charsAdded.push(3);
 		}
 		else if (e.getSource() == btn_dot)
 		{
 			System.out.println("you clicked dot button!");
 			str_number.append(".");
 			txt.setText(str_number.toString());
+			charsAdded.push(1);
 		}
 		else if (e.getSource() == btn_del)
 		{
 			System.out.println("you clicked DEL button!");
-			str_number.deleteCharAt(str_number.length() - 1);
+			str_number.delete(str_number.length() - charsAdded.pop(), str_number.length());
 			txt.setText(str_number.toString());
 		}
 		else if (e.getSource() == btn_equ)
@@ -233,13 +265,16 @@ class CalculatorGUI extends JFrame implements ActionListener
 			{
 				result = ExpressionOperations.evaluateInfixExpressionWithDoubles(str_number.toString());
 
-				txt.setText(str_number.toString() + " = " + result);
+				txtHistory.setText(str_number.toString());
+				txt.setText("" + result);
 
 				str_number.delete(0, str_number.length());
+				charsAdded.clear();
 			}
 			catch (Exception caught)
 			{
-				txt.setText(str_number.toString() + " --> Error: " + caught.getMessage());
+				txtHistory.setText(str_number.toString());
+				txt.setText("Error: " + caught.getMessage());
 			}
 		}
 	}

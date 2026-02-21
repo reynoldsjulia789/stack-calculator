@@ -91,4 +91,13 @@ public class Stack<Type>
 
         return this.head.next.data;
     }
+
+    /**
+     * Emptys the stack of all contents
+     */
+    public void clear()
+    {
+        this.head.next = null;
+        this.size      = 0;
+    }
 }
