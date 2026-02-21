@@ -132,7 +132,7 @@ public class ExpressionOperations
         }
 
         // else postfix has error in it
-        throw new ArithmeticException("expression could not be evaluated. check expression syntax");
+        throw new ArithmeticException("syntax error");
     }
 
     /**
@@ -358,7 +358,7 @@ public class ExpressionOperations
                 }
                 else
                 {
-                    throw new IllegalArgumentException("() don't match. check expression syntax");
+                    throw new IllegalArgumentException("() mismatch");
                 }
 
                 lastType = 2;
@@ -397,7 +397,7 @@ public class ExpressionOperations
 
         if (operators.size() > 0)
         {
-            throw new IllegalArgumentException("() don't match. check expression syntax");
+            throw new IllegalArgumentException("() mismatch");
         }
 
         expression = postfixExpression.toString().trim();
