@@ -112,6 +112,81 @@ public class ExpressionOperationsTest
     }
 
     @Nested
+    @DisplayName("postfix expression with doubles evaluation tests")
+    class evaluatePostfixDoubles
+    {
+        @Test
+        @DisplayName("Basic Addition")
+        public void add()
+        {
+            assertEquals(4.0, ExpressionOperations.evaluatePostfixExpressionWithDoubles("2 2 +"));
+        }
+
+        @Test
+        @DisplayName("Basic Subtraction")
+        public void subtract()
+        {
+            assertEquals(1.0, ExpressionOperations.evaluatePostfixExpressionWithDoubles("43.5 42.5 -"));
+        }
+
+        @Test
+        @DisplayName("Basic Multiplication")
+        public void multiply()
+        {
+            assertEquals(10.0, ExpressionOperations.evaluatePostfixExpressionWithDoubles("2.0 5.0 *"));
+        }
+
+        @Test
+        @DisplayName("Basic Integer Division")
+        public void divide()
+        {
+            assertEquals(2.5, ExpressionOperations.evaluatePostfixExpressionWithDoubles("5 2 /"));
+        }
+
+        @Test
+        @DisplayName("Throws exception if attempting to divide by 0")
+        public void divide0()
+        {
+            assertThrows(Exception.class, () -> ExpressionOperations.evaluatePostfixExpressionWithDoubles("2 0 /"));
+        }
+
+        @Test
+        @DisplayName("Basic Exponent")
+        public void exponent()
+        {
+            assertEquals(25.0, ExpressionOperations.evaluatePostfixExpressionWithDoubles("5 2.0 ^"));
+        }
+
+        @Test
+        @DisplayName("evaluates complex expression")
+        public void complex()
+        {
+            assertEquals(4.0, ExpressionOperations.evaluatePostfixExpressionWithDoubles("1 2 + 3 4 - - 6 5 - /"));
+        }
+
+        @Test
+        @DisplayName("throws exception if expression is blank")
+        public void blank()
+        {
+            assertThrows(Exception.class, () -> ExpressionOperations.evaluatePostfixExpressionWithDoubles(" "));
+        }
+
+        @Test
+        @DisplayName("throws exception if expression is empty")
+        public void empty()
+        {
+            assertThrows(Exception.class, () -> ExpressionOperations.evaluatePostfixExpressionWithDoubles(""));
+        }
+
+        @Test
+        @DisplayName("throws exception if expression is null")
+        public void nullExp()
+        {
+            assertThrows(Exception.class, () -> ExpressionOperations.evaluatePostfixExpressionWithDoubles(null));
+        }
+    }
+
+    @Nested
     @DisplayName("Infix conversion tests")
     class convertInfixToPostfix
     {
