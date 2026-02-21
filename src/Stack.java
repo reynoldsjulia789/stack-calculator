@@ -1,5 +1,10 @@
 package src;
 
+/**
+ * Custom stack class
+ * @param <Type> the type of object the stack will hold
+ * @author Julia Reynolds
+ */
 public class Stack<Type>
 {
     Node head;
