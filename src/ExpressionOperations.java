@@ -28,7 +28,7 @@ public class ExpressionOperations
         }
 
         exp      = postfixExpression.trim().toCharArray();
-        operands = new Stack<>();
+        operands = new Stack<Integer>();
 
         // Iterate through postfix expression
         for (idx = 0; idx < exp.length; idx++)
@@ -63,6 +63,118 @@ public class ExpressionOperations
     }
 
     /**
+     * Evaluates a postfix expression and returns the result.
+     * Supports + - * / ^ operations and one-digit operands.
+     * @param postfixExpression expression must be in postfix form and must have whitespace separating tokens
+     * @return int result
+     * @throws IllegalArgumentException expression is null or blank
+     * @throws ArithmeticException expression is unable to be evaluated, usually caused by a syntax error
+     */
+    public static double evaluatePostfixExpressionWithDoubles(String postfixExpression) throws IllegalArgumentException, ArithmeticException
+    {
+        double           right, left;
+        int              idx;
+        String[]         exp;
+        Stack<Double>    operands;
+
+        // verify expression exists and isn't blank
+        if (postfixExpression == null || postfixExpression.isBlank())
+        {
+            throw new IllegalArgumentException("cannot evaluate null or blank expression");
+        }
+
+        exp      = postfixExpression.trim().split("\\s+");
+        operands = new Stack<Double>();
+
+        // Iterate through postfix expression
+        for (idx = 0; idx < exp.length; idx++)
+        {
+            // if the current item is a double, push to stack
+            if (isDouble(exp[idx]))
+            {
+                operands.push(Double.parseDouble(exp[idx]));
+            }
+            else if (isInteger(exp[idx]))
+            {
+                operands.push((double) Integer.parseInt(exp[idx]));
+            }
+            else if (isOperator(exp[idx]))
+            {
+                // pop stack & attach operand to right of operator
+                right = operands.pop();
+
+                // pop again and attach operand to left of operator
+                left = operands.pop();
+
+                // evaluate and push the results to stack
+                operands.push(evaluate(left, exp[idx], right));
+            }
+        }
+
+        // if only one number left in stack, pop and this is the final result
+        if (operands.size == 1)
+        {
+            return operands.pop();
+        }
+
+        // else postfix has error in it
+        throw new ArithmeticException("expression could not be evaluated. check expression syntax");
+    }
+
+    /**
+     * Private helper method that checks if a String is a Double
+     * @param toCheck the String to check
+     * @return true if the String is a double, false if it is not a double
+     */
+    private static boolean isDouble(String toCheck)
+    {
+        try
+        {
+            Double.parseDouble(toCheck);
+
+            return true;
+        }
+        catch (Exception caught)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Private helper method that checks if a String is an Integer
+     * @param toCheck the String to check
+     * @return true if the String is an int, false if it is not an int
+     */
+    private static boolean isInteger(String toCheck)
+    {
+        try
+        {
+            Integer.parseInt(toCheck);
+
+            return true;
+        }
+        catch (Exception caught)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Private helper method that checks if a String is an operator
+     * @param toCheck the String to evaluate
+     * @return true if the String is an operator, false otherwise
+     */
+    private static boolean isOperator(String toCheck)
+    {
+        return (toCheck.trim().equals("+") ||
+                toCheck.trim().equals("-") ||
+                toCheck.trim().equals("*") ||
+                toCheck.trim().equals("/") ||
+                toCheck.trim().equals("%") ||
+                toCheck.trim().equals("^"));
+    }
+
+    /**
      * Private helper method that checks if a character is an operator
      * @param toCheck the character to evaluate
      * @return true if the character is an operator, false otherwise
@@ -73,6 +185,7 @@ public class ExpressionOperations
                 toCheck == '-' ||
                 toCheck == '*' ||
                 toCheck == '/' ||
+                toCheck == '%' ||
                 toCheck == '^');
     }
 
@@ -94,6 +207,36 @@ public class ExpressionOperations
             case '*' -> (left * right);
             case '^' -> (int) Math.pow(left, right);
             case '/' ->
+            {
+                if (right == 0)
+                {
+                    throw new ArithmeticException("divide by 0 error");
+                }
+
+                yield (left / right);
+            }
+            default -> throw new IllegalArgumentException("invalid operator");
+        };
+    }
+
+    /**
+     * Private helper method that evaluates an expression
+     * @param left the double to the left of the operator
+     * @param operator addition(+), subtraction(-), multiplication(*), division(/), and exponents(^) are supported
+     * @param right the double to the right of the operator
+     * @return double result
+     * @throws IllegalArgumentException throws an exception if illegal operator is passed
+     * @throws ArithmeticException throws an exception if attempting to divide by 0
+     */
+    private static double evaluate(double left, String operator, double right) throws IllegalArgumentException, ArithmeticException
+    {
+        return switch (operator)
+        {
+            case "+" -> (left + right);
+            case "-" -> (left - right);
+            case "*" -> (left * right);
+            case "^" -> (int) Math.pow(left, right);
+            case "/" ->
             {
                 if (right == 0)
                 {
@@ -136,14 +279,14 @@ public class ExpressionOperations
         }
 
         postfixExpression = new StringBuilder();
-        operators         = new Stack<>();
+        operators         = new Stack<Character>();
         exp               = infixExpression.trim().toCharArray();
 
         // Iterate through postfix expression
         for (idx = 0; idx < exp.length; idx++)
         {
             // write operands to postfix expression
-            if (Character.isDigit(exp[idx]))
+            if (Character.isDigit(exp[idx]) || isVariable(exp[idx]))
             {
                 postfixExpression.append(exp[idx]);
                 postfixExpression.append(" ");
@@ -231,5 +374,20 @@ public class ExpressionOperations
         };
 
         return operator1value - operator2value;
+    }
+
+    private static boolean isVariable(char toCheck)
+    {
+        return (
+                toCheck == 'A' ||
+                toCheck == 'B' ||
+                toCheck == 'C' ||
+                toCheck == 'D' ||
+                toCheck == 'E' ||
+                toCheck == 'F' ||
+                toCheck == 'G' ||
+                toCheck == 'H' ||
+                toCheck == 'I' ||
+                toCheck == 'J');
     }
 }
