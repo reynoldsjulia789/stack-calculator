@@ -100,11 +100,25 @@ public class ExpressionOperations
             }
             else if (isOperator(exp[idx].charAt(0)))
             {
-                // pop stack & attach operand to right of operator
-                right = operands.pop();
+                if (operands.size != 0)
+                {
+                    // pop stack & attach operand to right of operator
+                    right = operands.pop();
+                }
+                else
+                {
+                    throw new IllegalArgumentException("syntax error");
+                }
 
-                // pop again and attach operand to left of operator
-                left = operands.pop();
+                if (operands.size != 0)
+                {
+                    // pop again and attach operand to left of operator
+                    left = operands.pop();
+                }
+                else
+                {
+                    throw new IllegalArgumentException("syntax error");
+                }
 
                 // evaluate and push the results to stack
                 operands.push(evaluate(left, exp[idx], right));
@@ -286,7 +300,7 @@ public class ExpressionOperations
      */
     private static String convertToPostfix(String[] infixExpression) throws IllegalArgumentException
     {
-        int              idx;
+        int              idx, lastType;
         Stack<Character> operators;
         StringBuilder    postfixExpression;
         String           expression;
@@ -299,6 +313,7 @@ public class ExpressionOperations
 
         postfixExpression = new StringBuilder();
         operators         = new Stack<>();
+        lastType          = -1;
 
         // Iterate through postfix expression
         for (idx = 0; idx < infixExpression.length; idx++)
@@ -308,24 +323,36 @@ public class ExpressionOperations
             {
                 postfixExpression.append(infixExpression[idx]);
                 postfixExpression.append(" ");
+                lastType = 0;
             }
 
             // push ( to stack
             else if (infixExpression[idx].equals("("))
             {
                 operators.push(infixExpression[idx].charAt(0));
+                lastType = 1;
             }
 
             // write operators in stack to postfix expression until we reach (, discard (
             else if (infixExpression[idx].equals(")"))
             {
-                while (operators.size != 0 && operators.peek() != '(')
+                if (lastType == 1)
+                {
+                    throw new IllegalArgumentException("empty ()");
+                }
+
+                if (lastType == 3)
+                {
+                    throw new IllegalArgumentException("infix syntax error");
+                }
+
+                while (operators.size() != 0 && operators.peek() != '(')
                 {
                     postfixExpression.append(operators.pop());
                     postfixExpression.append(" ");
                 }
 
-                if (operators.size != 0 && operators.peek() == '(')
+                if (operators.size() != 0 && operators.peek() == '(')
                 {
                     operators.pop();
                 }
@@ -333,13 +360,20 @@ public class ExpressionOperations
                 {
                     throw new IllegalArgumentException("() don't match. check expression syntax");
                 }
+
+                lastType = 2;
             }
 
             // handle operator
             else if (isOperator(infixExpression[idx].charAt(0)))
             {
+                if (idx == 0 || idx == infixExpression.length - 1 || lastType == 1 || lastType == 3)
+                {
+                    throw new IllegalArgumentException("infix syntax error");
+                }
+
                 // while stack is not empty and the precedence of the top item > current item
-                while (operators.size > 0 && compareOperators(operators.peek(), infixExpression[idx].charAt(0)) > 0)
+                while (operators.size() > 0 && compareOperators(operators.peek(), infixExpression[idx].charAt(0)) > 0)
                 {
                     postfixExpression.append(operators.pop());
                     postfixExpression.append(" ");
@@ -347,19 +381,21 @@ public class ExpressionOperations
 
                 // push current operator onto stack
                 operators.push(infixExpression[idx].charAt(0));
+
+                lastType = 3;
             }
 
             // ignore everything else
         }
 
         // write any remaining operators to the expression
-        while (operators.size > 0 && isOperator(operators.peek()))
+        while (operators.size() > 0 && isOperator(operators.peek()))
         {
             postfixExpression.append(operators.pop());
             postfixExpression.append(" ");
         }
 
-        if (operators.size > 0)
+        if (operators.size() > 0)
         {
             throw new IllegalArgumentException("() don't match. check expression syntax");
         }
