@@ -48,7 +48,7 @@ class CalculatorGUI extends JFrame implements ActionListener
 
 	public CalculatorGUI()
 	{
-		JFrame frame = new JFrame("Simple Java Calculator");
+		JFrame frame = new JFrame("Stack Calculator");
 		frame.setSize(320,420);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);

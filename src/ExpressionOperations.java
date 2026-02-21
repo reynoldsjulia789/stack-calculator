@@ -289,6 +289,7 @@ public class ExpressionOperations
         int              idx;
         Stack<Character> operators;
         StringBuilder    postfixExpression;
+        String           expression;
 
         // verify expression exists and isn't blank
         if (infixExpression == null || infixExpression.length == 0)
@@ -324,7 +325,14 @@ public class ExpressionOperations
                     postfixExpression.append(" ");
                 }
 
-                operators.pop();
+                if (operators.size != 0 && operators.peek() == '(')
+                {
+                    operators.pop();
+                }
+                else
+                {
+                    throw new IllegalArgumentException("() don't match. check expression syntax");
+                }
             }
 
             // handle operator
@@ -353,7 +361,14 @@ public class ExpressionOperations
 
         if (operators.size > 0)
         {
-            throw new IllegalArgumentException("expression is invalid. double check syntax");
+            throw new IllegalArgumentException("() don't match. check expression syntax");
+        }
+
+        expression = postfixExpression.toString().trim();
+
+        if (expression.isBlank())
+        {
+            throw new IllegalArgumentException("empty infix expression");
         }
 
         return postfixExpression.toString().trim();
