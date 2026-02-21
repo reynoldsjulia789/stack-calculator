@@ -254,23 +254,23 @@ public class ExpressionOperations
      * @param infixExpression expression must be in infix form
      * @return int result
      */
-    public static int evaluateInfixExpression(String infixExpression)
+    public static double evaluateInfixExpressionWithDoubles(String infixExpression)
     {
-        return evaluatePostfixExpression(convertToPostfix(infixExpression));
+        return evaluatePostfixExpressionWithDoubles(convertToPostfix(infixExpression.trim().split("\\s+")));
     }
 
     /**
      * Converts an infix expression to a postfix expression
-     * @param infixExpression expression must be in infix form
+     * @param infixExpression expression must be in infix form, cannot have doubles
      * @return postfix expression as a String
      * @throws IllegalArgumentException null expression passed or blank/empty String passed or expression is invalid
      */
     public static String convertToPostfix(String infixExpression) throws IllegalArgumentException
     {
-        char[]           exp;
-        int              idx;
-        Stack<Character> operators;
-        StringBuilder    postfixExpression;
+        int           idx;
+        StringBuilder builder;
+
+        infixExpression = infixExpression.trim();
 
         // verify expression exists and isn't blank
         if (infixExpression == null || infixExpression.isBlank())
@@ -278,28 +278,60 @@ public class ExpressionOperations
             throw new IllegalArgumentException("cannot evaluate null or blank infix expression");
         }
 
+        builder = new StringBuilder();
+
+        // convert String to String[]
+        for (idx = 0; idx < infixExpression.length(); idx++)
+        {
+            if (!Character.isWhitespace(infixExpression.charAt(idx)))
+            {
+                builder.append(infixExpression.charAt(idx));
+                builder.append(" ");
+            }
+        }
+
+        return convertToPostfix(builder.toString().split("\\s+"));
+    }
+
+    /**
+     * Converts an infix expression to a postfix expression
+     * @param infixExpression String[] containing expression tokens
+     * @return postfix expression as a String
+     * @throws IllegalArgumentException null expression passed or blank/empty String passed or expression is invalid
+     */
+    private static String convertToPostfix(String[] infixExpression) throws IllegalArgumentException
+    {
+        int              idx;
+        Stack<Character> operators;
+        StringBuilder    postfixExpression;
+
+        // verify expression exists and isn't blank
+        if (infixExpression == null || infixExpression.length == 0)
+        {
+            throw new IllegalArgumentException("cannot evaluate null or blank infix expression");
+        }
+
         postfixExpression = new StringBuilder();
         operators         = new Stack<Character>();
-        exp               = infixExpression.trim().toCharArray();
 
         // Iterate through postfix expression
-        for (idx = 0; idx < exp.length; idx++)
+        for (idx = 0; idx < infixExpression.length; idx++)
         {
             // write operands to postfix expression
-            if (Character.isDigit(exp[idx]) || isVariable(exp[idx]))
+            if (Character.isDigit(infixExpression[idx].charAt(0)) || isVariable(infixExpression[idx]))
             {
-                postfixExpression.append(exp[idx]);
+                postfixExpression.append(infixExpression[idx]);
                 postfixExpression.append(" ");
             }
 
             // push ( to stack
-            else if (exp[idx] == '(')
+            else if (infixExpression[idx].equals("("))
             {
-                operators.push(exp[idx]);
+                operators.push(infixExpression[idx].charAt(0));
             }
 
             // write operators in stack to postfix expression until we reach (, discard (
-            else if (exp[idx] == ')')
+            else if (infixExpression[idx].equals(")"))
             {
                 while (operators.size != 0 && operators.peek() != '(')
                 {
@@ -311,17 +343,17 @@ public class ExpressionOperations
             }
 
             // handle operator
-            else if (isOperator(exp[idx]))
+            else if (isOperator(infixExpression[idx].charAt(0)))
             {
                 // while stack is not empty and the precedence of the top item > current item
-                while (operators.size > 0 && compareOperators(operators.peek(), exp[idx]) > 0)
+                while (operators.size > 0 && compareOperators(operators.peek(), infixExpression[idx].charAt(0)) > 0)
                 {
                     postfixExpression.append(operators.pop());
                     postfixExpression.append(" ");
                 }
 
                 // push current operator onto stack
-                operators.push(exp[idx]);
+                operators.push(infixExpression[idx].charAt(0));
             }
 
             // ignore everything else
@@ -376,18 +408,17 @@ public class ExpressionOperations
         return operator1value - operator2value;
     }
 
-    private static boolean isVariable(char toCheck)
+    private static boolean isVariable(String toCheck)
     {
-        return (
-                toCheck == 'A' ||
-                toCheck == 'B' ||
-                toCheck == 'C' ||
-                toCheck == 'D' ||
-                toCheck == 'E' ||
-                toCheck == 'F' ||
-                toCheck == 'G' ||
-                toCheck == 'H' ||
-                toCheck == 'I' ||
-                toCheck == 'J');
+        return (toCheck.equals("A") ||
+                toCheck.equals("B") ||
+                toCheck.equals("C") ||
+                toCheck.equals("D") ||
+                toCheck.equals("E") ||
+                toCheck.equals("F") ||
+                toCheck.equals("G") ||
+                toCheck.equals("H") ||
+                toCheck.equals("I") ||
+                toCheck.equals("J"));
     }
 }
