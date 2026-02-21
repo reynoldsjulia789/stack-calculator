@@ -92,13 +92,13 @@ public class ExpressionOperations
             // if the current item is a double, push to stack
             if (isDouble(exp[idx]))
             {
-                operands.push(Double.parseDouble(exp[idx]));
+                operands.push(Double.parseDouble(exp[idx].trim()));
             }
             else if (isInteger(exp[idx]))
             {
                 operands.push((double) Integer.parseInt(exp[idx]));
             }
-            else if (isOperator(exp[idx].charAt(0)))
+            else if (exp[idx].length() == 1 && isOperator(exp[idx].charAt(0)))
             {
                 if (operands.size != 0)
                 {
@@ -144,7 +144,7 @@ public class ExpressionOperations
     {
         try
         {
-            Double.parseDouble(toCheck);
+            Double.parseDouble(toCheck.trim());
 
             return true;
         }
