@@ -1,7 +1,6 @@
 package src;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Scanner;
 
@@ -70,48 +69,44 @@ public class CalculatorInputFileReader
      */
     private static void EvaluateExpressionsFromFile(String inputFilePath, String outputFileName)
     {
-        String      expression;
+        PrintStream fileWriter;
+        String infixExpression, postfixExpression, postfixWithValues;
 
         try (Scanner fileReader = new Scanner(new File(inputFilePath)))
         {
+            fileWriter = new PrintStream(outputFileName);
+
             while (fileReader.hasNext())
             {
 
-                expression = fileReader.nextLine().trim();
+                infixExpression = fileReader.nextLine().trim();
 
-                try (PrintStream fileWriter = new PrintStream(outputFileName))
+                // print original infix expression
+                fileWriter.print(infixExpression + " --> ");
+
+                try
                 {
-                    // print original infix expression
-                    fileWriter.print(expression + " --> ");
+                    // convert to postfix expression
+                    postfixExpression = ExpressionOperations.convertToPostfix(infixExpression);
 
-                    try
-                    {
-                        // convert to postfix expression
-                        expression = ExpressionOperations.convertToPostfix(expression);
+                    // print corresponding postfix expression
+                    fileWriter.print(postfixExpression + " --> ");
 
-                        // print corresponding postfix expression
-                        fileWriter.print(expression + " --> ");
+                    // replace variables in expression
+                    postfixWithValues = findAndReplaceVariables(postfixExpression);
 
-                        // replace variables in expression
-                        expression = findAndReplaceVariables(expression);
-
-                        // evaluate postfix expression
-                        fileWriter.println(ExpressionOperations.evaluatePostfixExpressionWithDoubles(expression));
-                    }
-                    catch (Exception caught)
-                    {
-                        fileWriter.print(caught.getMessage());
-                    }
+                    // evaluate postfix expression
+                    fileWriter.println(ExpressionOperations.evaluatePostfixExpressionWithDoubles(postfixWithValues));
                 }
                 catch (Exception caught)
                 {
-                    System.out.println("Error writing to file.\r\nError message: " + caught.getMessage());
+                    fileWriter.println(caught.getMessage());
                 }
             }
         }
         catch (Exception caught)
         {
-            System.out.println("Error reading file.\r\nError message: " + caught.getMessage());
+            System.out.println("File IO Error.\r\nError message: " + caught.getMessage());
         }
     }
 
