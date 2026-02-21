@@ -338,7 +338,7 @@ public class ExpressionOperations
             {
                 if (lastType == 1)
                 {
-                    throw new IllegalArgumentException("empty ()");
+                    throw new IllegalArgumentException("empty expression");
                 }
 
                 if (lastType == 3)
@@ -358,7 +358,7 @@ public class ExpressionOperations
                 }
                 else
                 {
-                    throw new IllegalArgumentException("() mismatch");
+                    throw new IllegalArgumentException("parenthesis mismatch");
                 }
 
                 lastType = 2;
@@ -397,7 +397,7 @@ public class ExpressionOperations
 
         if (operators.size() > 0)
         {
-            throw new IllegalArgumentException("() mismatch");
+            throw new IllegalArgumentException("parenthesis mismatch");
         }
 
         expression = postfixExpression.toString().trim();
