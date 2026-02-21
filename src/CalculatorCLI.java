@@ -13,7 +13,6 @@ public class CalculatorCLI
      * Reads user input,
      * provides feedback to user if there are errors,
      * and displays the result of the entered expression
-     * @param args
      */
     public static void main(String[] args)
     {
@@ -62,8 +61,8 @@ public class CalculatorCLI
             }
             catch (Exception caught)
             {
-                System.out.print("There was an error evaluating your expression:");
-                System.out.println(caught.getMessage() + "\r\n");
+                System.out.println("There was an error evaluating your expression.");
+                System.out.println("Error message: " + caught.getMessage() + "\r\n");
             }
         }
     }
