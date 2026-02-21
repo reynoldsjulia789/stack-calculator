@@ -9,6 +9,10 @@ import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Tests to verify the methods in the ExpressionOperations class are working as intended
+ * @author Julia Reynolds
+ */
 public class ExpressionOperationsTest
 {
     @Nested
