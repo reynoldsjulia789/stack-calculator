@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Nested;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Tests to ensure the Stack class is working as intended
+ * @author Julia Reynolds
+ */
 public class StackTest
 {
     @Nested
