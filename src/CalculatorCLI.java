@@ -22,6 +22,8 @@ public class CalculatorCLI
 
         // Welcome user
         System.out.println("Welcome to the Stack Calculator!\r\n");
+        System.out.println("This calculator processes infix expressions (can include spaces).\r\n" +
+                           "It only handles integers 0-9. No decimals or numbers > 9\r\n");
 
         userInput = new Scanner(System.in);
 

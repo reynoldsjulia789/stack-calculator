@@ -1,12 +1,12 @@
 (((A + B) - (C - D)) / (E - F)) --> A B + C D - - E F - / --> -2.0
 (((A))) --> A --> 8.0
 (A) --> A --> 8.0
-((A --> () mismatch
-(B --> () mismatch
-D) --> () mismatch
-D)) --> () mismatch
-() --> empty ()
-((  )) --> empty ()
+((A --> parenthesis mismatch
+(B --> parenthesis mismatch
+D) --> parenthesis mismatch
+D)) --> parenthesis mismatch
+() --> empty expression
+((  )) --> empty expression
 (((A + B))) --> A B + --> 7.0
 ((A * B)) --> A B * --> -8.0
 (A / B) --> A B / --> -8.0
@@ -27,8 +27,8 @@ A*B - C ^ C ^ D --> A B * C C D ^ ^ - --> -9.0
 A B - C ^ C ^ D --> A B C C D ^ ^ - --> syntax error
 (( A - B * C) ^ D ^ E) ^ ( F / G * H + I ) --> A B C * - D E ^ ^ F G / H * I + ^ --> 0.0
 (A - B) * (( C * D ) + E) --> A B - C D * E + * --> -153.0
-(((  )((  ) )((((  )))) --> empty ()
-(((  )((  ) ((((  )))) --> empty ()
+(((  )((  ) )((((  )))) --> empty expression
+(((  )((  ) ((((  )))) --> empty expression
 A * ( B / C) + D( A - B) --> A B C / * D A B - + --> syntax error
 A * ( B / C) + D ^ ( A - B) --> A B C / * D A B - ^ + --> -262145.14285714284
 A * ( B / C) + D ^ A - B --> A B C / * D A ^ + B - --> 65535.857142857145
