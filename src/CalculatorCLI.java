@@ -2,8 +2,19 @@ package src;
 
 import java.util.Scanner;
 
+/**
+ * Command Line Interface for Calculator
+ * @author Julia Reynolds
+ */
 public class CalculatorCLI
 {
+    /**
+     * Main method.
+     * Reads user input,
+     * provides feedback to user if there are errors,
+     * and displays the result of the entered expression
+     * @param args
+     */
     public static void main(String[] args)
     {
         int     result;
@@ -38,15 +49,15 @@ public class CalculatorCLI
 
                 // Ask user if they would like to evaluate another expression
                 System.out.print("Do you have another expression you would like to process? (y/n)\t");
-                switch(userInput.nextLine().trim())
+                switch (userInput.nextLine().trim())
                 {
-                    case "y", "Y", "yes", "Yes", "YES":     System.out.println();
-                                                            break;
-
-                    case "n", "N", "no", "No", "NO":        System.out.println("\r\nThank you for using the Stack Calculator!");
-                                                            return;
-
-                    default:                                System.out.println("Please provide a y/n answer.");
+                    case "y", "Y", "yes", "Yes", "YES" -> System.out.println();
+                    case "n", "N", "no", "No", "NO"    ->
+                    {
+                        System.out.println("\r\nThank you for using the Stack Calculator!");
+                        return;
+                    }
+                    default                            -> System.out.println("Please provide a y/n answer.");
                 }
             }
             catch (Exception caught)
