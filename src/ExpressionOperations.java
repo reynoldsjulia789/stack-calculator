@@ -98,7 +98,7 @@ public class ExpressionOperations
             {
                 operands.push((double) Integer.parseInt(exp[idx]));
             }
-            else if (isOperator(exp[idx]))
+            else if (isOperator(exp[idx].charAt(0)))
             {
                 // pop stack & attach operand to right of operator
                 right = operands.pop();
@@ -157,21 +157,6 @@ public class ExpressionOperations
         {
             return false;
         }
-    }
-
-    /**
-     * Private helper method that checks if a String is an operator
-     * @param toCheck the String to evaluate
-     * @return true if the String is an operator, false otherwise
-     */
-    private static boolean isOperator(String toCheck)
-    {
-        return (toCheck.trim().equals("+") ||
-                toCheck.trim().equals("-") ||
-                toCheck.trim().equals("*") ||
-                toCheck.trim().equals("/") ||
-                toCheck.trim().equals("%") ||
-                toCheck.trim().equals("^"));
     }
 
     /**
