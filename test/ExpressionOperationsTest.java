@@ -140,10 +140,18 @@ public class ExpressionOperationsTest
         }
 
         @Test
+        @DisplayName("Handles passed postfix expression")
+        public void alreadyPostfix()
+        {
+            assertEquals("2 2 +", ExpressionOperations.convertToPostfix("22+"));
+        }
+
+        @Test
         @DisplayName("Throws exception if expression is invalid")
         public void invalidExpression()
         {
-            assertThrows(Exception.class, () -> ExpressionOperations.convertToPostfix("22+"));
+            assertThrows(Exception.class, () -> ExpressionOperations.convertToPostfix("2(2+"));
+            assertThrows(Exception.class, () -> ExpressionOperations.convertToPostfix(")22+"));
         }
 
         @Nested
