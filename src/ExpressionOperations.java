@@ -28,7 +28,7 @@ public class ExpressionOperations
         }
 
         exp      = postfixExpression.trim().toCharArray();
-        operands = new Stack<Integer>();
+        operands = new Stack<>();
 
         // Iterate through postfix expression
         for (idx = 0; idx < exp.length; idx++)
@@ -84,7 +84,7 @@ public class ExpressionOperations
         }
 
         exp      = postfixExpression.trim().split("\\s+");
-        operands = new Stack<Double>();
+        operands = new Stack<>();
 
         // Iterate through postfix expression
         for (idx = 0; idx < exp.length; idx++)
@@ -312,7 +312,7 @@ public class ExpressionOperations
         }
 
         postfixExpression = new StringBuilder();
-        operators         = new Stack<Character>();
+        operators         = new Stack<>();
 
         // Iterate through postfix expression
         for (idx = 0; idx < infixExpression.length; idx++)
