@@ -82,29 +82,28 @@ public class ExpressionOperations
      * @param operator addition(+), subtraction(-), multiplication(*), division(/), and exponents(^) are supported
      * @param right the integer to the right of the operator
      * @return int result
-     * @throws ArithmeticException throws an exception if attempting to divide by 0 or use an illegal operator
+     * @throws IllegalArgumentException throws an exception if illegal operator is passed
+     * @throws ArithmeticException throws an exception if attempting to divide by 0
      */
-    private static int evaluate(int left, char operator, int right) throws ArithmeticException
+    private static int evaluate(int left, char operator, int right) throws IllegalArgumentException, ArithmeticException
     {
-        switch (operator)
+        return switch (operator)
         {
-            case '+': return (left + right);
-
-            case '-': return (left - right);
-
-            case '*': return (left * right);
-
-            case '^': return (int) Math.pow(left, right);
-
-            case '/':
+            case '+' -> (left + right);
+            case '-' -> (left - right);
+            case '*' -> (left * right);
+            case '^' -> (int) Math.pow(left, right);
+            case '/' ->
+            {
                 if (right == 0)
                 {
                     throw new ArithmeticException("divide by 0 error");
                 }
-                return (left / right);
 
-            default: throw new ArithmeticException("invalid operator");
-        }
+                yield (left / right);
+            }
+            default -> throw new IllegalArgumentException("invalid operator");
+        };
     }
 
     /**
@@ -121,10 +120,12 @@ public class ExpressionOperations
      * Converts an infix expression to a postfix expression
      * @param infixExpression expression must be in infix form
      * @return postfix expression as a String
-     * @throws IllegalArgumentException null expression passed or blank/empty String passed
+     * @throws IllegalArgumentException null expression passed or blank/empty String passed or expression is invalid
      */
     public static String convertToPostfix(String infixExpression) throws IllegalArgumentException
     {
+        char[]           exp;
+        int              idx;
         Stack<Character> operators;
         StringBuilder    postfixExpression;
 
@@ -136,7 +137,99 @@ public class ExpressionOperations
 
         postfixExpression = new StringBuilder();
         operators         = new Stack<>();
+        exp               = infixExpression.trim().toCharArray();
 
-        return postfixExpression.toString();
+        // Iterate through postfix expression
+        for (idx = 0; idx < exp.length; idx++)
+        {
+            // write operands to postfix expression
+            if (Character.isDigit(exp[idx]))
+            {
+                postfixExpression.append(exp[idx]);
+                postfixExpression.append(" ");
+            }
+
+            // push ( to stack
+            else if (exp[idx] == '(')
+            {
+                operators.push(exp[idx]);
+            }
+
+            // write operators in stack to postfix expression until we reach (, discard (
+            else if (exp[idx] == ')')
+            {
+                while (operators.size != 0 && operators.peek() != '(')
+                {
+                    postfixExpression.append(operators.pop());
+                    postfixExpression.append(" ");
+                }
+
+                operators.pop();
+            }
+
+            // handle operator
+            else if (isOperator(exp[idx]))
+            {
+                // while stack is not empty and the precedence of the top item > current item
+                while (operators.size > 0 && compareOperators(operators.peek(), exp[idx]) > 0)
+                {
+                    postfixExpression.append(operators.pop());
+                    postfixExpression.append(" ");
+                }
+
+                // push current operator onto stack
+                operators.push(exp[idx]);
+            }
+
+            // ignore everything else
+        }
+
+        // write any remaining operators to the expression
+        while (operators.size > 0 && isOperator(operators.peek()))
+        {
+            postfixExpression.append(operators.pop());
+            postfixExpression.append(" ");
+        }
+
+        if (operators.size > 0)
+        {
+            throw new IllegalArgumentException("expression is invalid. double check syntax");
+        }
+
+        return postfixExpression.toString().trim();
+    }
+
+    /**
+     * Private helper method that compares two operators to determine precedence when converting
+     * an infix expression to a postfix expression
+     * @param operator1 operator at the top of the stack
+     * @param operator2 current operator
+     * @return returns an int representing the order of the operators: > 0 if operator 1 has higher precedence, < 0 if lower precedence, and 0 if equal
+     * @throws ArithmeticException throws exception if an invalid operator is passed
+     */
+    private static int compareOperators(char operator1, char operator2) throws ArithmeticException
+    {
+        int operator1value, operator2value;
+
+        operator1value = switch (operator1)
+        {
+            case '+', '-'       -> 2;
+            case '*', '/', '%'  -> 4;
+            case '^'            -> 5;
+            case ')', '('       -> 0;
+            default             -> throw new IllegalArgumentException("illegal operator");
+        };
+
+        operator2value = switch (operator2)
+        {
+            case '+', '-'       -> 1;
+            case '*', '/', '%'  -> 3;
+            case '^'            -> 6;
+            case ')'            -> 0;
+            case '('            -> 100;
+            default             -> throw new IllegalArgumentException("illegal operator");
+        };
+
+        return operator1value - operator2value;
     }
 }
