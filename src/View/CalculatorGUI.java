@@ -1,8 +1,10 @@
-package src;
+package src.View;
+
+import src.Model.ExpressionOperations;
+import src.Model.Stack;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Scanner;
 import javax.swing.*;
 
 /**

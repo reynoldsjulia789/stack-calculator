@@ -1,4 +1,6 @@
-package src;
+package src.View;
+
+import src.Model.ExpressionOperations;
 
 import java.io.File;
 import java.io.PrintStream;

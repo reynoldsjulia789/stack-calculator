@@ -1,4 +1,6 @@
-package src;
+package src.Model;
+
+import src.Model.Operators;
 
 /**
  * A collection of static methods that perform operations on arithmetic expressions,
@@ -39,7 +41,7 @@ public class ExpressionOperations
             {
                 operands.push(Character.getNumericValue(exp[idx]));
             }
-            else if (isOperator(exp[idx]))
+            else if (Operators.isOperator(exp[idx]))
             {
                 // pop stack & attach operand to right of operator
                 right = operands.pop();
@@ -152,100 +154,6 @@ public class ExpressionOperations
         {
             return false;
         }
-    }
-
-    /**
-     * Private helper method that checks if a String is an Integer
-     * @param toCheck the String to check
-     * @return true if the String is an int, false if it is not an int
-     */
-    private static boolean isInteger(String toCheck)
-    {
-        try
-        {
-            Integer.parseInt(toCheck);
-
-            return true;
-        }
-        catch (Exception caught)
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Private helper method that checks if a character is an operator
-     * @param toCheck the character to evaluate
-     * @return true if the character is an operator, false otherwise
-     */
-    private static boolean isOperator(char toCheck)
-    {
-        return (toCheck == '+' ||
-                toCheck == '-' ||
-                toCheck == '*' ||
-                toCheck == '/' ||
-                toCheck == '%' ||
-                toCheck == '^');
-    }
-
-    /**
-     * Private helper method that evaluates an expression
-     * @param left the integer to the left of the operator
-     * @param operator addition(+), subtraction(-), multiplication(*), division(/), and exponents(^) are supported
-     * @param right the integer to the right of the operator
-     * @return int result
-     * @throws IllegalArgumentException throws an exception if illegal operator is passed
-     * @throws ArithmeticException throws an exception if attempting to divide by 0
-     */
-    private static int evaluate(int left, char operator, int right) throws IllegalArgumentException, ArithmeticException
-    {
-        return switch (operator)
-        {
-            case '+' -> (left + right);
-            case '-' -> (left - right);
-            case '*' -> (left * right);
-            case '^' -> (int) Math.pow(left, right);
-            case '/' ->
-            {
-                if (right == 0)
-                {
-                    throw new ArithmeticException("divide by 0 error");
-                }
-
-                yield (left / right);
-            }
-            default -> throw new IllegalArgumentException("invalid operator");
-        };
-    }
-
-    /**
-     * Private helper method that evaluates an expression
-     * @param left the double to the left of the operator
-     * @param operator addition(+), subtraction(-), multiplication(*), division(/), and exponents(^) are supported
-     * @param right the double to the right of the operator
-     * @return double result
-     * @throws IllegalArgumentException throws an exception if illegal operator is passed
-     * @throws ArithmeticException throws an exception if attempting to divide by 0
-     */
-    private static double evaluate(double left, String operator, double right) throws IllegalArgumentException, ArithmeticException
-    {
-        return switch (operator)
-        {
-            case "+" -> (left + right);
-            case "-" -> (left - right);
-            case "*" -> (left * right);
-            case "^" -> (int) Math.pow(left, right);
-            case "/" ->
-            {
-                if (right == 0)
-                {
-                    throw new ArithmeticException("divide by 0 error");
-                }
-
-                yield (left / right);
-            }
-            default -> throw new IllegalArgumentException("invalid operator");
-        };
     }
 
     /**
@@ -408,40 +316,6 @@ public class ExpressionOperations
         }
 
         return postfixExpression.toString().trim();
-    }
-
-    /**
-     * Private helper method that compares two operators to determine precedence when converting
-     * an infix expression to a postfix expression
-     * @param operator1 operator at the top of the stack
-     * @param operator2 current operator
-     * @return returns an int representing the order of the operators: > 0 if operator 1 has higher precedence, < 0 if lower precedence, and 0 if equal
-     * @throws ArithmeticException throws exception if an invalid operator is passed
-     */
-    private static int compareOperators(char operator1, char operator2) throws ArithmeticException
-    {
-        int operator1value, operator2value;
-
-        operator1value = switch (operator1)
-        {
-            case '+', '-'       -> 2;
-            case '*', '/', '%'  -> 4;
-            case '^'            -> 5;
-            case ')', '('       -> 0;
-            default             -> throw new IllegalArgumentException("illegal operator");
-        };
-
-        operator2value = switch (operator2)
-        {
-            case '+', '-'       -> 1;
-            case '*', '/', '%'  -> 3;
-            case '^'            -> 6;
-            case ')'            -> 0;
-            case '('            -> 100;
-            default             -> throw new IllegalArgumentException("illegal operator");
-        };
-
-        return operator1value - operator2value;
     }
 
     private static boolean isVariable(String toCheck)

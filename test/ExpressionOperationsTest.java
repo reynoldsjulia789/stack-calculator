@@ -1,6 +1,6 @@
 package test;
 
-import src.ExpressionOperations;
+import src.Model.ExpressionOperations;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;

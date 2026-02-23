@@ -1,4 +1,4 @@
-package src;
+package src.Model;
 
 /**
  * Custom stack class
