@@ -50,7 +50,7 @@ public class ExpressionOperations
                 left = operands.pop();
 
                 // evaluate and push the results to stack
-                operands.push(evaluate(left, exp[idx], right));
+                operands.push(Operators.evaluate(left, exp[idx], right));
             }
         }
 
@@ -96,11 +96,7 @@ public class ExpressionOperations
             {
                 operands.push(Double.parseDouble(exp[idx].trim()));
             }
-            else if (isInteger(exp[idx]))
-            {
-                operands.push((double) Integer.parseInt(exp[idx]));
-            }
-            else if (exp[idx].length() == 1 && isOperator(exp[idx].charAt(0)))
+            else if (exp[idx].length() == 1 && Operators.isOperator(exp[idx].charAt(0)))
             {
                 if (operands.size != 0)
                 {
@@ -123,7 +119,7 @@ public class ExpressionOperations
                 }
 
                 // evaluate and push the results to stack
-                operands.push(evaluate(left, exp[idx], right));
+                operands.push(Operators.evaluate(left, exp[idx], right));
             }
         }
 
@@ -273,7 +269,7 @@ public class ExpressionOperations
             }
 
             // handle operator
-            else if (isOperator(infixExpression[idx].charAt(0)))
+            else if (Operators.isOperator(infixExpression[idx].charAt(0)))
             {
                 if (idx == 0 || idx == infixExpression.length - 1 || lastType == 1 || lastType == 3)
                 {
@@ -281,7 +277,7 @@ public class ExpressionOperations
                 }
 
                 // while stack is not empty and the precedence of the top item > current item
-                while (operators.size() > 0 && compareOperators(operators.peek(), infixExpression[idx].charAt(0)) > 0)
+                while (operators.size() > 0 && Operators.compareOperators(operators.peek(), infixExpression[idx].charAt(0)) > 0)
                 {
                     postfixExpression.append(operators.pop());
                     postfixExpression.append(" ");
@@ -297,7 +293,7 @@ public class ExpressionOperations
         }
 
         // write any remaining operators to the expression
-        while (operators.size() > 0 && isOperator(operators.peek()))
+        while (operators.size() > 0 && Operators.isOperator(operators.peek()))
         {
             postfixExpression.append(operators.pop());
             postfixExpression.append(" ");
