@@ -9,19 +9,24 @@ public class ExpressionManipulation
      * @param expression the mathematical expression to tokenize
      * @return ArrayList of tokens, separated into operators and operands
      */
-    public static ArrayList<String> tokenize(String expression)
+    public static ArrayList<String> tokenize(final String expression)
     {
         char              check;
-        int               idx;
+        int               idx, exprLength;
         ArrayList<String> tokens;
         StringBuilder     temp;
+        String            expr;
 
-        tokens = new ArrayList<>();
-        temp   = new StringBuilder();
+        expr       = expression.trim();
+        exprLength = expr.length();
 
-        for (idx = 0; idx < expression.length(); idx++)
+        tokens     = new ArrayList<>();
+        temp       = new StringBuilder();
+
+
+        for (idx = 0; idx < exprLength; idx++)
         {
-            check = expression.charAt(0);
+            check = expr.charAt(idx);
 
             if (Character.isDigit(check) || check == '.')
             {
@@ -37,6 +42,11 @@ public class ExpressionManipulation
 
                 tokens.addLast(Character.toString(check));
             }
+        }
+
+        if (!temp.isEmpty())
+        {
+            tokens.addLast(temp.toString());
         }
 
         return tokens;
@@ -55,13 +65,12 @@ public class ExpressionManipulation
 
     /**
      * Checks tokenized infix expression for errors,
-     * adds '*' if there is a digit after ')',
-     * adds 0 before '.' if there is not a digit there.
+     * adds '*' if there is a digit after ')'
      * @param infixExpression tokenized infix expression to normalize
      */
     public static void normalizeInfix(ArrayList<String> infixExpression)
     {
-
+        // TODO: finish this
     }
 
     /**

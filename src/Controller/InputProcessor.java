@@ -1,6 +1,7 @@
 package src.Controller;
 
 import src.Model.ExpressionEvaluation;
+import src.Model.ExpressionManipulation;
 import src.Model.Stack;
 
 /**
@@ -37,7 +38,7 @@ public class InputProcessor
 
     public String convertExpression()
     {
-        return ExpressionEvaluation.convertToPostfix(this.input.toString());
+        return ExpressionManipulation.convertToPostfix(this.input.toString());
     }
 
 }
