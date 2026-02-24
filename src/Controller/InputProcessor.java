@@ -38,4 +38,9 @@ public class InputProcessor
         return result.toString();
     }
 
+    public String convertExpression()
+    {
+        return ExpressionOperations.convertToPostfix(this.input.toString());
+    }
+
 }
