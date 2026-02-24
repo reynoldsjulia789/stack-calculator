@@ -24,6 +24,10 @@ public class Tokenizer
             {
                 tokens.addLast(expressionScanner.nextDouble() + "");
             }
+            else if (expressionScanner.hasNextInt())
+            {
+                tokens.addLast(expressionScanner.nextInt() + "");
+            }
             else
             {
                 tokens.addLast(expressionScanner.next());
