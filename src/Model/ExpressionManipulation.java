@@ -32,7 +32,7 @@ public class ExpressionManipulation
             {
                 temp.append(check);
             }
-            else if (Operators.isOperator(check) || Operators.isParenthesis(check))
+            else if (Operators.isOperator(check) || Operators.isParenthesis(check) || Character.isLetter(check))
             {
                 if (!temp.isEmpty())
                 {

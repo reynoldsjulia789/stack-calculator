@@ -249,5 +249,47 @@ public class ExpressionManipulationTest
 
             assertEquals(check, ExpressionManipulation.tokenize("(5+2.3 ) *24^0.5 -( 15 / 3)   "));
         }
+
+        @Test
+        @DisplayName("simple expression with variables")
+        public void variablesSimple()
+        {
+            ArrayList<String> check;
+
+            check = new ArrayList<>();
+
+            check.addLast("A");
+            check.addLast("+");
+            check.addLast("B");
+
+            assertEquals(check, ExpressionManipulation.tokenize("A+B"));
+        }
+
+        @Test
+        @DisplayName("simple expression with variables")
+        public void variablesComplicated()
+        {
+            ArrayList<String> check;
+
+            check = new ArrayList<>();
+
+            check.addLast("(");
+            check.addLast("A");
+            check.addLast("+");
+            check.addLast("b");
+            check.addLast(")");
+            check.addLast("*");
+            check.addLast("X");
+            check.addLast("^");
+            check.addLast("y");
+            check.addLast("-");
+            check.addLast("(");
+            check.addLast("C");
+            check.addLast("/");
+            check.addLast("c");
+            check.addLast(")");
+
+            assertEquals(check, ExpressionManipulation.tokenize(" (A+b ) *X^y -( C / c)   "));
+        }
     }
 }
