@@ -1,6 +1,6 @@
 package src.View;
 
-import src.Model.ExpressionOperations;
+import src.Model.ExpressionEvaluation;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -89,7 +89,7 @@ public class CalculatorInputFileReader
                 try
                 {
                     // convert to postfix expression
-                    postfixExpression = ExpressionOperations.convertToPostfix(infixExpression);
+                    postfixExpression = ExpressionEvaluation.convertToPostfix(infixExpression);
 
                     // print corresponding postfix expression
                     fileWriter.print(postfixExpression + " --> ");
@@ -98,7 +98,7 @@ public class CalculatorInputFileReader
                     postfixWithValues = findAndReplaceVariables(postfixExpression);
 
                     // evaluate postfix expression
-                    fileWriter.println(ExpressionOperations.evaluatePostfixExpressionWithDoubles(postfixWithValues));
+                    fileWriter.println(ExpressionEvaluation.evaluatePostfixExpressionWithDoubles(postfixWithValues));
                 }
                 catch (Exception caught)
                 {

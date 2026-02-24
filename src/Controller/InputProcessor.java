@@ -1,10 +1,7 @@
 package src.Controller;
 
-import src.Model.ExpressionOperations;
+import src.Model.ExpressionEvaluation;
 import src.Model.Stack;
-import src.Model.Tokenizer;
-import src.Model.Operators;
-import static src.Model.ExpressionOperations.evaluateInfixExpressionWithDoubles;
 
 /**
  * The purpose of this class is to process user input from the user interface
@@ -30,7 +27,7 @@ public class InputProcessor
     {
         try
         {
-            return "" + ExpressionOperations.evaluateInfixExpressionWithDoubles(this.input.toString());
+            return "" + ExpressionEvaluation.evaluateInfix(this.input.toString());
         }
         catch (Exception caught)
         {
@@ -40,7 +37,7 @@ public class InputProcessor
 
     public String convertExpression()
     {
-        return ExpressionOperations.convertToPostfix(this.input.toString());
+        return ExpressionEvaluation.convertToPostfix(this.input.toString());
     }
 
 }

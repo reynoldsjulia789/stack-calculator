@@ -1,6 +1,6 @@
 package src.View;
 
-import src.Model.ExpressionOperations;
+import src.Model.ExpressionEvaluation;
 
 import java.util.Scanner;
 
@@ -39,13 +39,13 @@ public class CalculatorCLI
             try
             {
                 // convert infix expression to postfix expression
-                postfixExpression = ExpressionOperations.convertToPostfix(infixExpression);
+                postfixExpression = ExpressionEvaluation.convertToPostfix(infixExpression);
 
                 // Print postfix expression
                 System.out.println("The postfix expression for the input infix is:\t\t" + postfixExpression);
 
                 // Try to evaluate expression
-                result = ExpressionOperations.evaluatePostfixExpression(postfixExpression);
+                result = ExpressionEvaluation.evaluatePostfixExpression(postfixExpression);
 
                 // Print results
                 System.out.println("The final result after evaluating the postfix is:\t" + result);

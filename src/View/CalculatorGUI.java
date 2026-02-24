@@ -1,6 +1,6 @@
 package src.View;
 
-import src.Model.ExpressionOperations;
+import src.Model.ExpressionEvaluation;
 import src.Model.Stack;
 
 import java.awt.*;
@@ -265,7 +265,7 @@ class CalculatorGUI extends JFrame implements ActionListener
 
 			try
 			{
-				result = ExpressionOperations.evaluateInfixExpressionWithDoubles(str_number.toString());
+				result = ExpressionEvaluation.evaluateInfix(str_number.toString());
 
 				txtHistory.setText(str_number.toString());
 				txt.setText("" + result);

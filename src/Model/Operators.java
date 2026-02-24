@@ -22,6 +22,16 @@ public class Operators
     }
 
     /**
+     * Checks if a character is either '(' or ')'
+     * @param toCheck the character to evaluate
+     * @return true if the character is a parenthesis, false otherwise
+     */
+    public static boolean isParenthesis(char toCheck)
+    {
+        return (toCheck == '(' || toCheck == ')');
+    }
+
+    /**
      * Compares two operators to determine precedence when converting
      * an infix expression to a postfix expression
      * @param operator1 operator at the top of the stack
@@ -53,65 +63,5 @@ public class Operators
         };
 
         return operator1value - operator2value;
-    }
-
-    /**
-     * Private helper method that evaluates an expression
-     * @param left the integer to the left of the operator
-     * @param operator addition(+), subtraction(-), multiplication(*), division(/), and exponents(^) are supported
-     * @param right the integer to the right of the operator
-     * @return int result
-     * @throws IllegalArgumentException throws an exception if illegal operator is passed
-     * @throws ArithmeticException throws an exception if attempting to divide by 0
-     */
-    public static int evaluate(int left, char operator, int right) throws IllegalArgumentException, ArithmeticException
-    {
-        return switch (operator)
-        {
-            case '+' -> (left + right);
-            case '-' -> (left - right);
-            case '*' -> (left * right);
-            case '^' -> (int) Math.pow(left, right);
-            case '/' ->
-            {
-                if (right == 0)
-                {
-                    throw new ArithmeticException("divide by 0 error");
-                }
-
-                yield (left / right);
-            }
-            default -> throw new IllegalArgumentException("invalid operator");
-        };
-    }
-
-    /**
-     * Private helper method that evaluates an expression
-     * @param left the double to the left of the operator
-     * @param operator addition(+), subtraction(-), multiplication(*), division(/), and exponents(^) are supported
-     * @param right the double to the right of the operator
-     * @return double result
-     * @throws IllegalArgumentException throws an exception if illegal operator is passed
-     * @throws ArithmeticException throws an exception if attempting to divide by 0
-     */
-    public static double evaluate(double left, String operator, double right) throws IllegalArgumentException, ArithmeticException
-    {
-        return switch (operator)
-        {
-            case "+" -> (left + right);
-            case "-" -> (left - right);
-            case "*" -> (left * right);
-            case "^" -> (int) Math.pow(left, right);
-            case "/" ->
-            {
-                if (right == 0)
-                {
-                    throw new ArithmeticException("divide by 0 error");
-                }
-
-                yield (left / right);
-            }
-            default -> throw new IllegalArgumentException("invalid operator");
-        };
     }
 }
