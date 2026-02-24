@@ -28,14 +28,14 @@ public class InputProcessor
 
     public String compute()
     {
-        Double result;
-
-        // tokenize input
-
-        // evaluate expression and return result
-        result = ExpressionOperations.evaluateInfixExpressionWithDoubles("1");
-
-        return result.toString();
+        try
+        {
+            return "" + ExpressionOperations.evaluateInfixExpressionWithDoubles(this.input.toString());
+        }
+        catch (Exception caught)
+        {
+            return caught.getMessage();
+        }
     }
 
     public String convertExpression()
