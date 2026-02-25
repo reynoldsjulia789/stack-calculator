@@ -8,6 +8,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
+ * TODO: take keyboard input
  * GUI Calculator
  * @author CSCD 300 homework 5/6 starter code
  */
@@ -271,7 +272,9 @@ class CalculatorGUI extends JFrame implements ActionListener
 				txt.setText("" + result);
 
 				str_number.delete(0, str_number.length());
+				str_number.append(result);
 				charsAdded.clear();
+				charsAdded.push(Double.toString(result).length());
 			}
 			catch (Exception caught)
 			{
