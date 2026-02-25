@@ -28,7 +28,7 @@ public class InputProcessor
     {
         try
         {
-            return "" + ExpressionEvaluation.evaluateInfix(this.input.toString());
+            return "" + ExpressionEvaluation.evaluateInfixExpression(this.input.toString());
         }
         catch (Exception caught)
         {

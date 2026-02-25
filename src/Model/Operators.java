@@ -22,6 +22,21 @@ public class Operators
     }
 
     /**
+     * Checks if a character is an operator
+     * @param toCheck the character to evaluate
+     * @return true if the character is an operator, false otherwise
+     */
+    public static boolean isOperator(String toCheck)
+    {
+        if (toCheck.length() != 1)
+        {
+            return false;
+        }
+
+        return isOperator(toCheck.charAt(0));
+    }
+
+    /**
      * Checks if a character is either '(' or ')'
      * @param toCheck the character to evaluate
      * @return true if the character is a parenthesis, false otherwise
@@ -39,26 +54,26 @@ public class Operators
      * @return returns an int representing the order of the operators: > 0 if operator 1 has higher precedence, < 0 if lower precedence, and 0 if equal
      * @throws ArithmeticException throws exception if an invalid operator is passed
      */
-    public static int compareOperators(char operator1, char operator2) throws ArithmeticException
+    public static int compareOperators(String operator1, String operator2) throws ArithmeticException
     {
         int operator1value, operator2value;
 
         operator1value = switch (operator1)
         {
-            case '+', '-'       -> 2;
-            case '*', '/', '%'  -> 4;
-            case '^'            -> 5;
-            case ')', '('       -> 0;
+            case "+", "-"       -> 2;
+            case "*", "/", "%"  -> 4;
+            case "^"            -> 5;
+            case ")", "("       -> 0;
             default             -> throw new IllegalArgumentException("illegal operator");
         };
 
         operator2value = switch (operator2)
         {
-            case '+', '-'       -> 1;
-            case '*', '/', '%'  -> 3;
-            case '^'            -> 6;
-            case ')'            -> 0;
-            case '('            -> 100;
+            case "+", "-"       -> 1;
+            case "*", "/", "%"  -> 3;
+            case "^"            -> 6;
+            case ")"            -> 0;
+            case "("            -> 100;
             default             -> throw new IllegalArgumentException("illegal operator");
         };
 

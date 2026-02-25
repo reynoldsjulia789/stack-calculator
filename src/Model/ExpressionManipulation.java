@@ -4,6 +4,15 @@ import java.util.ArrayList;
 
 public class ExpressionManipulation
 {
+    private enum Type
+    {
+        UNKNOWN,
+        OPERATOR,
+        OPERAND,
+        LEFT_PARENTHESIS,
+        RIGHT_PARENTHESIS
+    }
+
     /**
      * Method that takes a string and turns it into a String ArrayList
      * @param expression the mathematical expression to tokenize
@@ -53,37 +62,13 @@ public class ExpressionManipulation
     }
 
     /**
-     * Checks tokenized infix expression for errors,
-     * adds '*' if there is a digit after ')',
-     * adds 0 before '.' if there is not a digit there.
-     * @param infixExpression String infix expression to normalize
-     */
-    public static void normalizeInfix(String infixExpression)
-    {
-        normalizeInfix(tokenize(infixExpression));
-    }
-
-    /**
-     * Checks tokenized infix expression for errors,
-     * adds '*' if there is a digit after ')'
-     * @param infixExpression tokenized infix expression to normalize
-     */
-    public static void normalizeInfix(ArrayList<String> infixExpression)
-    {
-        // TODO: finish this
-    }
-
-    /**
      * Converts an infix expression to a postfix expression
-     * @param infixExpression expression must be in infix form, cannot have doubles
-     * @return postfix expression as a String
+     * @param infixExpression expression must be in infix form
+     * @return postfix expression as an ArrayList<String>
      * @throws IllegalArgumentException null expression passed or blank/empty String passed or expression is invalid
      */
-    public static String convertToPostfix(String infixExpression) throws IllegalArgumentException
+    public static ArrayList<String> convertToPostfix(String infixExpression) throws IllegalArgumentException
     {
-        int           idx;
-        StringBuilder builder;
-
         infixExpression = infixExpression.trim();
 
         // verify expression exists and isn't blank
@@ -92,82 +77,80 @@ public class ExpressionManipulation
             throw new IllegalArgumentException("cannot evaluate null or blank infix expression");
         }
 
-        builder = new StringBuilder();
-
-        // convert String to String[]
-        for (idx = 0; idx < infixExpression.length(); idx++)
-        {
-            if (!Character.isWhitespace(infixExpression.charAt(idx)))
-            {
-                builder.append(infixExpression.charAt(idx));
-                builder.append(" ");
-            }
-        }
-
-        return convertToPostfix(builder.toString().split("\\s+"));
+        return convertToPostfix(tokenize(infixExpression));
     }
 
     /**
      * Converts an infix expression to a postfix expression
-     * @param infixExpression String[] containing expression tokens
-     * @return postfix expression as a String
+     * @param infixExpression ArrayList<String> containing expression tokens
+     * @return a new ArrayList<String> containing the expression in postfix form
      * @throws IllegalArgumentException null expression passed or blank/empty String passed or expression is invalid
      */
-    private static String convertToPostfix(String[] infixExpression) throws IllegalArgumentException
+    private static ArrayList<String> convertToPostfix(ArrayList<String> infixExpression) throws IllegalArgumentException
     {
-        int              idx, lastType;
-        Stack<Character> operators;
-        StringBuilder    postfixExpression;
-        String           expression;
+        int               idx, expLength;
+        Stack<String>     operators;
+        ArrayList<String> postfixExpression;
+        String            token;
+        Type              lastType;
 
-        // verify expression exists and isn't blank
-        if (infixExpression == null || infixExpression.length == 0)
+        expLength = infixExpression.size();
+
+        // verify expression isn't blank
+        if (expLength == 0)
         {
-            throw new IllegalArgumentException("cannot evaluate null or blank infix expression");
+            throw new IllegalArgumentException("cannot convert empty infix expression");
         }
 
-        postfixExpression = new StringBuilder();
+        postfixExpression = new ArrayList<>();
         operators         = new Stack<>();
-        lastType          = -1;
+        lastType          = Type.UNKNOWN;
 
         // Iterate through postfix expression
-        for (idx = 0; idx < infixExpression.length; idx++)
+        for (idx = 0; idx < expLength; idx++)
         {
+            token = infixExpression.get(idx);
+
             // write operands to postfix expression
-            if (Character.isDigit(infixExpression[idx].charAt(0)) || isVariable(infixExpression[idx]))
+            if (Character.isDigit(token.charAt(0)) || isVariable(token))
             {
-                postfixExpression.append(infixExpression[idx]);
-                postfixExpression.append(" ");
-                lastType = 0;
+                // if last Type was ')', convert as if there was a '*'
+                if (lastType == Type.RIGHT_PARENTHESIS)
+                {
+                    // push * onto stack
+                    operators.push("*");
+                }
+
+                postfixExpression.addLast(token);
+                lastType = Type.OPERAND;
             }
 
             // push ( to stack
-            else if (infixExpression[idx].equals("("))
+            else if (token.equals("("))
             {
-                operators.push(infixExpression[idx].charAt(0));
-                lastType = 1;
+                operators.push(token);
+                lastType = Type.LEFT_PARENTHESIS;
             }
 
             // write operators in stack to postfix expression until we reach (, discard (
-            else if (infixExpression[idx].equals(")"))
+            else if (token.equals(")"))
             {
-                if (lastType == 1)
+                if (lastType == Type.LEFT_PARENTHESIS)
                 {
                     throw new IllegalArgumentException("empty expression");
                 }
 
-                if (lastType == 3)
+                if (lastType == Type.OPERATOR)
                 {
                     throw new IllegalArgumentException("infix syntax error");
                 }
 
-                while (operators.size() != 0 && operators.peek() != '(')
+                while (operators.size() != 0 && !operators.peek().equals("("))
                 {
-                    postfixExpression.append(operators.pop());
-                    postfixExpression.append(" ");
+                    postfixExpression.addLast(operators.pop());
                 }
 
-                if (operators.size() != 0 && operators.peek() == '(')
+                if (operators.size() != 0 && operators.peek().equals("("))
                 {
                     operators.pop();
                 }
@@ -176,28 +159,27 @@ public class ExpressionManipulation
                     throw new IllegalArgumentException("parenthesis mismatch");
                 }
 
-                lastType = 2;
+                lastType = Type.RIGHT_PARENTHESIS;
             }
 
             // handle operator
-            else if (Operators.isOperator(infixExpression[idx].charAt(0)))
+            else if (Operators.isOperator(token))
             {
-                if (idx == 0 || idx == infixExpression.length - 1 || lastType == 1 || lastType == 3)
+                if (idx == 0 || idx == infixExpression.size() - 1 || lastType == Type.LEFT_PARENTHESIS || lastType == Type.OPERATOR)
                 {
                     throw new IllegalArgumentException("infix syntax error");
                 }
 
                 // while stack is not empty and the precedence of the top item > current item
-                while (operators.size() > 0 && Operators.compareOperators(operators.peek(), infixExpression[idx].charAt(0)) > 0)
+                while (operators.size() > 0 && Operators.compareOperators(operators.peek(), token) > 0)
                 {
-                    postfixExpression.append(operators.pop());
-                    postfixExpression.append(" ");
+                    postfixExpression.addLast(operators.pop());
                 }
 
                 // push current operator onto stack
-                operators.push(infixExpression[idx].charAt(0));
+                operators.push(token);
 
-                lastType = 3;
+                lastType = Type.OPERATOR;
             }
 
             // ignore everything else
@@ -206,8 +188,7 @@ public class ExpressionManipulation
         // write any remaining operators to the expression
         while (operators.size() > 0 && Operators.isOperator(operators.peek()))
         {
-            postfixExpression.append(operators.pop());
-            postfixExpression.append(" ");
+            postfixExpression.addLast(operators.pop());
         }
 
         if (operators.size() > 0)
@@ -215,27 +196,27 @@ public class ExpressionManipulation
             throw new IllegalArgumentException("parenthesis mismatch");
         }
 
-        expression = postfixExpression.toString().trim();
-
-        if (expression.isBlank())
+        if (postfixExpression.isEmpty())
         {
             throw new IllegalArgumentException("empty infix expression");
         }
 
-        return postfixExpression.toString().trim();
+        return postfixExpression;
     }
 
+    /**
+     * Helper method to determine if a String is a variable.
+     * Variables must be single characters. Variables can be both upper and lowercase.
+     * @param toCheck the String to check
+     * @return true if the String is a variable, false otherwise
+     */
     private static boolean isVariable(String toCheck)
     {
-        return (toCheck.equals("A") ||
-                toCheck.equals("B") ||
-                toCheck.equals("C") ||
-                toCheck.equals("D") ||
-                toCheck.equals("E") ||
-                toCheck.equals("F") ||
-                toCheck.equals("G") ||
-                toCheck.equals("H") ||
-                toCheck.equals("I") ||
-                toCheck.equals("J"));
+        if (toCheck.trim().length() != 1)
+        {
+            return false;
+        }
+
+        return Character.isLetter(toCheck.charAt(0));
     }
 }

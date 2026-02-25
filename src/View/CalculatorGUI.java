@@ -266,7 +266,7 @@ class CalculatorGUI extends JFrame implements ActionListener
 
 			try
 			{
-				result = ExpressionEvaluation.evaluateInfix(str_number.toString());
+				result = ExpressionEvaluation.evaluateInfixExpression(str_number.toString());
 
 				txtHistory.setText(str_number.toString());
 				txt.setText("" + result);

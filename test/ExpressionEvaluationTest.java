@@ -119,70 +119,70 @@ public class ExpressionEvaluationTest
         @DisplayName("Basic Addition")
         public void add()
         {
-            assertEquals(4.0, ExpressionEvaluation.evaluatePostfixExpressionWithDoubles("2 2 +"));
+            assertEquals(4.0, ExpressionEvaluation.evaluatePostfixExpression("2 2 +"));
         }
 
         @Test
         @DisplayName("Basic Subtraction")
         public void subtract()
         {
-            assertEquals(1.0, ExpressionEvaluation.evaluatePostfixExpressionWithDoubles("43.5 42.5 -"));
+            assertEquals(1.0, ExpressionEvaluation.evaluatePostfixExpression("43.5 42.5 -"));
         }
 
         @Test
         @DisplayName("Basic Multiplication")
         public void multiply()
         {
-            assertEquals(10.0, ExpressionEvaluation.evaluatePostfixExpressionWithDoubles("2.0 5.0 *"));
+            assertEquals(10.0, ExpressionEvaluation.evaluatePostfixExpression("2.0 5.0 *"));
         }
 
         @Test
         @DisplayName("Basic Integer Division")
         public void divide()
         {
-            assertEquals(2.5, ExpressionEvaluation.evaluatePostfixExpressionWithDoubles("5 2 /"));
+            assertEquals(2.5, ExpressionEvaluation.evaluatePostfixExpression("5 2 /"));
         }
 
         @Test
         @DisplayName("Throws exception if attempting to divide by 0")
         public void divide0()
         {
-            assertThrows(Exception.class, () -> ExpressionEvaluation.evaluatePostfixExpressionWithDoubles("2 0 /"));
+            assertThrows(Exception.class, () -> ExpressionEvaluation.evaluatePostfixExpression("2 0 /"));
         }
 
         @Test
         @DisplayName("Basic Exponent")
         public void exponent()
         {
-            assertEquals(25.0, ExpressionEvaluation.evaluatePostfixExpressionWithDoubles("5 2.0 ^"));
+            assertEquals(25.0, ExpressionEvaluation.evaluatePostfixExpression("5 2.0 ^"));
         }
 
         @Test
         @DisplayName("evaluates complex expression")
         public void complex()
         {
-            assertEquals(4.0, ExpressionEvaluation.evaluatePostfixExpressionWithDoubles("1 2 + 3 4 - - 6 5 - /"));
+            assertEquals(4.0, ExpressionEvaluation.evaluatePostfixExpression("1 2 + 3 4 - - 6 5 - /"));
         }
 
         @Test
         @DisplayName("throws exception if expression is blank")
         public void blank()
         {
-            assertThrows(Exception.class, () -> ExpressionEvaluation.evaluatePostfixExpressionWithDoubles(" "));
+            assertThrows(Exception.class, () -> ExpressionEvaluation.evaluatePostfixExpression(" "));
         }
 
         @Test
         @DisplayName("throws exception if expression is empty")
         public void empty()
         {
-            assertThrows(Exception.class, () -> ExpressionEvaluation.evaluatePostfixExpressionWithDoubles(""));
+            assertThrows(Exception.class, () -> ExpressionEvaluation.evaluatePostfixExpression(""));
         }
 
         @Test
         @DisplayName("throws exception if expression is null")
         public void nullExp()
         {
-            assertThrows(Exception.class, () -> ExpressionEvaluation.evaluatePostfixExpressionWithDoubles(null));
+            assertThrows(Exception.class, () -> ExpressionEvaluation.evaluatePostfixExpression(null));
         }
     }
 }

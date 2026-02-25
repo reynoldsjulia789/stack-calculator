@@ -99,7 +99,7 @@ public class CalculatorInputFileReader
                     postfixWithValues = findAndReplaceVariables(postfixExpression);
 
                     // evaluate postfix expression
-                    fileWriter.println(ExpressionEvaluation.evaluatePostfixExpressionWithDoubles(postfixWithValues));
+                    fileWriter.println(ExpressionEvaluation.evaluatePostfixExpression(postfixWithValues));
                 }
                 catch (Exception caught)
                 {
