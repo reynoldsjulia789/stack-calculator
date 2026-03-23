@@ -2,11 +2,16 @@ package src.Model;
 
 import java.util.ArrayList;
 
+/**
+ * This class handles expression conversion and evaluation.
+ * @author Julia Reynolds
+ */
 public class Expression
 {
-    ArrayList<String> infixExpression;
-    ArrayList<String> postfixExpression;
-    double            result;
+    private ArrayList<String> infixExpression;
+    private ArrayList<String> postfixExpression;
+    private double            result;
+    private boolean           infixUsesVariables;
 
     private enum Type
     {
@@ -29,26 +34,37 @@ public class Expression
             throw new IllegalArgumentException("expression cannot be null");
         }
 
-        tokenize(expression);
-        convertToPostfix();
-        evaluatePostfixExpression();
+        this.infixExpression   = tokenize(expression);
+        this.postfixExpression = convertToPostfix();
+
+        if (!infixUsesVariables)
+        {
+            this.result = evaluatePostfixExpression();
+        }
     }
 
+    /**
+     * Returns the infix version of the expression to the caller
+     * @return returns a String representing the infix expression
+     */
+    public String getInfix()
+    {
+        return this.infixExpression.toString();
+    }
+
+    /**
+     * Returns the postfix version of the expression to the caller
+     * @return returns a String representing the postfix expression
+     */
     public String getPostfix()
     {
-        int           idx;
-        StringBuilder builder;
-
-        builder = new StringBuilder();
-
-        for (idx = 0; idx < this.postfixExpression.size(); idx++)
-        {
-            builder.append(this.postfixExpression.get(idx)).append(" ");
-        }
-
-        return builder.toString().trim();
+        return this.postfixExpression.toString();
     }
 
+    /**
+     * Returns the result of the expression to the caller
+     * @return a double representing the result of evaluating the expression
+     */
     public double getResult()
     {
         return this.result;
@@ -58,7 +74,7 @@ public class Expression
      * Method that takes a string and turns it into a String ArrayList separated into operators and operands
      * @param expression the mathematical expression to tokenize
      */
-    private void tokenize(final String expression)
+    private ArrayList<String> tokenize(final String expression)
     {
         char              check;
         int               idx, exprLength;
@@ -98,14 +114,14 @@ public class Expression
             tokens.addLast(temp.toString());
         }
 
-        this.infixExpression = tokens;
+        return tokens;
     }
 
     /**
      * Converts an infix expression to a postfix expression
      * @throws IllegalArgumentException expression is invalid
      */
-    private void convertToPostfix() throws IllegalArgumentException
+    private ArrayList<String> convertToPostfix() throws IllegalArgumentException
     {
         int               idx, expLength;
         Stack<String>     operators;
@@ -113,11 +129,11 @@ public class Expression
         String            token;
         Type              lastType;
 
-        expLength = this.infixExpression.size();
-
-        postfixExpression = new ArrayList<>();
-        operators         = new Stack<>();
-        lastType          = Type.UNKNOWN;
+        expLength               = this.infixExpression.size();
+        this.infixUsesVariables = false;
+        postfixExpression       = new ArrayList<>();
+        operators               = new Stack<>();
+        lastType                = Type.UNKNOWN;
 
         // Iterate through postfix expression
         for (idx = 0; idx < expLength; idx++)
@@ -127,6 +143,11 @@ public class Expression
             // write operands to postfix expression
             if (Character.isDigit(token.charAt(0)) || isVariable(token))
             {
+                if (isVariable(token))
+                {
+                    this.infixUsesVariables = true;
+                }
+
                 // if last Type was ')', convert as if there was a '*'
                 if (lastType == Type.RIGHT_PARENTHESIS)
                 {
@@ -214,7 +235,7 @@ public class Expression
             throw new IllegalArgumentException("empty infix expression");
         }
 
-        this.postfixExpression = postfixExpression;
+        return postfixExpression;
     }
 
     /**
@@ -223,7 +244,7 @@ public class Expression
      * @param toCheck the String to check
      * @return true if the String is a variable, false otherwise
      */
-    private static boolean isVariable(String toCheck)
+    private boolean isVariable(String toCheck)
     {
         if (toCheck.trim().length() != 1)
         {
@@ -239,7 +260,7 @@ public class Expression
      * @throws IllegalArgumentException due to syntax error
      * @throws ArithmeticException expression is unable to be evaluated, usually caused by a syntax error
      */
-    public void evaluatePostfixExpression() throws IllegalArgumentException, ArithmeticException
+    private double evaluatePostfixExpression() throws IllegalArgumentException, ArithmeticException
     {
         double           right, left;
         int              idx;
@@ -287,7 +308,7 @@ public class Expression
         // if only one number left in stack, pop and this is the final result
         if (operands.size == 1)
         {
-            this.result = operands.pop();
+            return operands.pop();
         }
 
         // else postfix has error in it
@@ -341,5 +362,14 @@ public class Expression
             }
             default -> throw new IllegalArgumentException("invalid operator");
         };
+    }
+
+    /**
+     * To string for expression
+     * @return String in the form of "infix expression = result"
+     */
+    public String toString()
+    {
+        return this.infixExpression.toString().trim() + " = " + this.result;
     }
 }
