@@ -1,7 +1,7 @@
 package test;
 
 import org.junit.jupiter.api.DisplayName;
-import src.Stack;
+import src.Model.Stack;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Nested;

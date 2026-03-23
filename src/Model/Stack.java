@@ -1,4 +1,4 @@
-package src;
+package src.Model;
 
 /**
  * Custom stack class
@@ -27,6 +27,27 @@ public class Stack<Type>
         {
             this.data = data;
             this.next = next;
+        }
+
+        /**
+         * To string for Stack node
+         * @return returns data and next for node called on
+         */
+        @Override
+        public String toString()
+        {
+            StringBuilder builder;
+
+            builder = new StringBuilder();
+
+            builder.append(this.data);
+
+            if (this.next != null)
+            {
+                builder.append(" -> ").append(this.next);
+            }
+
+            return builder.toString();
         }
     }
 
@@ -104,5 +125,20 @@ public class Stack<Type>
     {
         this.head.next = null;
         this.size      = 0;
+    }
+
+    /**
+     * To string for stack
+     * @return returns a String representing the stack
+     */
+    @Override
+    public String toString()
+    {
+        if (this.head.next == null)
+        {
+            return "empty stack";
+        }
+
+        return "[ " + this.head.next.toString() + " ]";
     }
 }

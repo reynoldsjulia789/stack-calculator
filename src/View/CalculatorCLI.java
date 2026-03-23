@@ -1,4 +1,6 @@
-package src;
+package src.View;
+
+import src.Model.Expression;
 
 import java.util.Scanner;
 
@@ -16,14 +18,13 @@ public class CalculatorCLI
      */
     public static void main(String[] args)
     {
-        int     result;
-        String  infixExpression, postfixExpression;
-        Scanner userInput;
+        Expression  expression;
+        String      infixExpression;
+        Scanner     userInput;
 
         // Welcome user
-        System.out.println("Welcome to the Stack Calculator!\r\n");
-        System.out.println("This calculator processes infix expressions (can include spaces).\r\n" +
-                           "It only handles integers 0-9. No decimals or numbers > 9\r\n");
+        System.out.println("Welcome to the Calculator!");
+        System.out.println("This calculator processes infix expressions.\r\n");
 
         userInput = new Scanner(System.in);
 
@@ -36,17 +37,13 @@ public class CalculatorCLI
             // Try to evaluate expression
             try
             {
-                // convert infix expression to postfix expression
-                postfixExpression = ExpressionOperations.convertToPostfix(infixExpression);
+                expression = new Expression(infixExpression);
 
                 // Print postfix expression
-                System.out.println("The postfix expression for the input infix is:\t\t" + postfixExpression);
-
-                // Try to evaluate expression
-                result = ExpressionOperations.evaluatePostfixExpression(postfixExpression);
+                System.out.println("The postfix expression for the input infix is:\t\t" + expression.getPostfix());
 
                 // Print results
-                System.out.println("The final result after evaluating the postfix is:\t" + result);
+                System.out.println("The final result after evaluating the postfix is:\t" + expression.getResult());
 
                 // Ask user if they would like to evaluate another expression
                 System.out.print("Do you have another expression you would like to process? (y/n)\t");
@@ -55,7 +52,7 @@ public class CalculatorCLI
                     case "y", "Y", "yes", "Yes", "YES" -> System.out.println();
                     case "n", "N", "no", "No", "NO"    ->
                     {
-                        System.out.println("\r\nThank you for using the Stack Calculator!");
+                        System.out.println("\r\nThank you for using this Calculator!");
                         return;
                     }
                     default                            -> System.out.println("Please provide a y/n answer.");

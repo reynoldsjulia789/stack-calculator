@@ -1,19 +1,18 @@
-package src;
+package src.View;
+
+import src.Controller.InputProcessor;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Scanner;
 import javax.swing.*;
 
 /**
+ * TODO: take keyboard input
  * GUI Calculator
  * @author CSCD 300 homework 5/6 starter code
  */
-class CalculatorGUI extends JFrame implements ActionListener
+public class CalculatorGUI extends JFrame implements ActionListener
 {
-
-	private static Stack<Integer> charsAdded = new Stack<>();
-
 	private static final long serialVersionUID = 1L;
 
 	// Buttons
@@ -43,8 +42,8 @@ class CalculatorGUI extends JFrame implements ActionListener
 	JTextField txt		  = new JTextField();
 	JTextField txtHistory = new JTextField();
 
-	// string builder to keep track of expression
-	StringBuilder str_number = new StringBuilder();
+	// input processor to keep track of expression
+	InputProcessor input = new InputProcessor();
 
 	public CalculatorGUI()
 	{
@@ -92,11 +91,11 @@ class CalculatorGUI extends JFrame implements ActionListener
 		btn9.addActionListener(this);
 		NumberPanel.add(btn_mult);
 		btn_mult.addActionListener(this);
-		
-		NumberPanel.add(btn0);
-		btn0.addActionListener(this);
+
 		NumberPanel.add(btn_dot);
 		btn_dot.addActionListener(this);
+		NumberPanel.add(btn0);
+		btn0.addActionListener(this);
 		NumberPanel.add(btn_del);
 		btn_del.addActionListener(this);
 		NumberPanel.add(btn_div);
@@ -142,140 +141,84 @@ class CalculatorGUI extends JFrame implements ActionListener
 	{
 		if (e.getSource() == btn1)
 		{
-			str_number.append("1");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("1"));
 		}
 		else if (e.getSource() == btn2)
 		{
-			str_number.append("2");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("2"));
 		}
 		else if (e.getSource() == btn3)
 		{
-			str_number.append("3");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("3"));
 		}
 		else if (e.getSource() == btn4)
 		{
-			str_number.append("4");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("4"));
 		}
 		else if (e.getSource() == btn5)
 		{
-			str_number.append("5");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("5"));
 		}
 		else if (e.getSource() == btn6)
 		{
-			str_number.append("6");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("6"));
 		}
 		else if (e.getSource() == btn7)
 		{
-			str_number.append("7");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("7"));
 		}
 		else if (e.getSource() == btn8)
 		{
-			str_number.append("8");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("8"));
 		}
 		else if (e.getSource() == btn9)
 		{
-			str_number.append("9");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("9"));
 		}
 		else if (e.getSource() == btn0)
 		{
-			str_number.append("0");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("0"));
 		}
 		else if (e.getSource() == btn_lpr)
 		{
-			str_number.append(" ( ");
-			txt.setText(str_number.toString());
-			charsAdded.push(3);
+			txt.setText(input.pressed("("));
 		}
 		else if (e.getSource() == btn_rpr)
 		{
-			str_number.append(" ) ");
-			txt.setText(str_number.toString());
-			charsAdded.push(3);
+			txt.setText(input.pressed(")"));
 		}
 		else if (e.getSource() == btn_pow)
 		{
-			str_number.append(" ^ ");
-			txt.setText(str_number.toString());
-			charsAdded.push(3);
+			txt.setText(input.pressed(" ^ "));
 		}
 		else if (e.getSource() == btn_add)
 		{
-			str_number.append(" + ");
-			txt.setText(str_number.toString());
-			charsAdded.push(3);
+			txt.setText(input.pressed(" + "));
 		}
 		else if (e.getSource() == btn_sub)
 		{
-			str_number.append(" - ");
-			txt.setText(str_number.toString());
-			charsAdded.push(3);
+			txt.setText(input.pressed(" - "));
 		}
 		else if (e.getSource() == btn_mult)
 		{
-			str_number.append(" * ");
-			txt.setText(str_number.toString());
-			charsAdded.push(3);
+			txt.setText(input.pressed(" * "));
 		}
 		else if (e.getSource() == btn_div)
 		{
-			str_number.append(" / ");
-			txt.setText(str_number.toString());
-			charsAdded.push(3);
+			txt.setText(input.pressed(" / "));
 		}
 		else if (e.getSource() == btn_dot)
 		{
-			System.out.println("you clicked dot button!");
-			str_number.append(".");
-			txt.setText(str_number.toString());
-			charsAdded.push(1);
+			txt.setText(input.pressed("."));
 		}
 		else if (e.getSource() == btn_del)
 		{
-			System.out.println("you clicked DEL button!");
-			str_number.delete(str_number.length() - charsAdded.pop(), str_number.length());
-			txt.setText(str_number.toString());
+			txt.setText(input.deleteLastInput());
 		}
 		else if (e.getSource() == btn_equ)
 		{
-			double result;
-
-			System.out.println("you clicked equal sign!");
-
-			try
-			{
-				result = ExpressionOperations.evaluateInfixExpressionWithDoubles(str_number.toString());
-
-				txtHistory.setText(str_number.toString());
-				txt.setText("" + result);
-
-				str_number.delete(0, str_number.length());
-				charsAdded.clear();
-			}
-			catch (Exception caught)
-			{
-				txtHistory.setText(str_number.toString());
-				txt.setText("Error: " + caught.getMessage());
-			}
+			txt.setText(input.compute());
+			txtHistory.setText(input.getLastExpression());
 		}
 	}
     
