@@ -18,9 +18,8 @@ public class CalculatorCLI
      */
     public static void main(String[] args)
     {
-        int         result;
         Expression  expression;
-        String      infixExpression, postfixExpression;
+        String      infixExpression;
         Scanner     userInput;
 
         // Welcome user
