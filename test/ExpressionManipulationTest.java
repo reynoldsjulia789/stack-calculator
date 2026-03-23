@@ -1,7 +1,6 @@
 package test;
 
-import src.Model.ExpressionEvaluation;
-import src.Model.ExpressionManipulation;
+import src.Model.Expression;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Tests to ensure the methods in the ExpressionManipulation class are working as intended
+ * Tests to ensure the methods in the Expression class are working as intended
  * @author Julia Reynolds
  */
 public class ExpressionManipulationTest
@@ -26,36 +25,36 @@ public class ExpressionManipulationTest
         @DisplayName("Converts simple addition")
         public void addition()
         {
-            assertEquals("2 2 +", ExpressionManipulation.convertToPostfix("2+2"));
+            assertEquals("2 2 +", Expression.convertToPostfix("2+2"));
         }
 
         @Test
         @DisplayName("Converts simple subtraction w ()")
         public void subtraction()
         {
-            assertEquals("2 2 -", ExpressionManipulation.convertToPostfix("(2-2)"));
+            assertEquals("2 2 -", Expression.convertToPostfix("(2-2)"));
         }
 
         @Test
         @DisplayName("Converts complex expression with ()")
         public void complex1()
         {
-            assertEquals("1 2 + 3 4 - - 6 5 - /", ExpressionManipulation.convertToPostfix("(((1+2)-(3-4))/(6-5))"));
+            assertEquals("1 2 + 3 4 - - 6 5 - /", Expression.convertToPostfix("(((1+2)-(3-4))/(6-5))"));
         }
 
         @Test
         @DisplayName("Converts complex expression no ()")
         public void complex2()
         {
-            assertEquals("2 4 * 2 2 1 ^ ^ -", ExpressionManipulation.convertToPostfix("2*4-2^2^1"));
+            assertEquals("2 4 * 2 2 1 ^ ^ -", Expression.convertToPostfix("2*4-2^2^1"));
         }
 
         @Test
         @DisplayName("Throws exception if expression is invalid")
         public void invalidExpression()
         {
-            assertThrows(Exception.class, () -> ExpressionManipulation.convertToPostfix("2(2+"));
-            assertThrows(Exception.class, () -> ExpressionManipulation.convertToPostfix(")22+"));
+            assertThrows(Exception.class, () -> Expression.convertToPostfix("2(2+"));
+            assertThrows(Exception.class, () -> Expression.convertToPostfix(")22+"));
         }
 
         @Nested
@@ -66,21 +65,21 @@ public class ExpressionManipulationTest
             @DisplayName("throws exception if expression is blank")
             public void blank()
             {
-                assertThrows(Exception.class, () -> ExpressionManipulation.convertToPostfix(" "));
+                assertThrows(Exception.class, () -> Expression.convertToPostfix(" "));
             }
 
             @Test
             @DisplayName("throws exception if expression is empty")
             public void empty()
             {
-                assertThrows(Exception.class, () -> ExpressionManipulation.convertToPostfix(""));
+                assertThrows(Exception.class, () -> Expression.convertToPostfix(""));
             }
 
             @Test
             @DisplayName("throws exception if expression is null")
             public void nullExp()
             {
-                assertThrows(Exception.class, () -> ExpressionManipulation.convertToPostfix(null));
+                assertThrows(Exception.class, () -> Expression.convertToPostfix(null));
             }
         }
 
@@ -92,21 +91,21 @@ public class ExpressionManipulationTest
             @DisplayName("Handles spaces between")
             public void spaces()
             {
-                assertEquals("2 2 *", ExpressionManipulation.convertToPostfix("2 * 2"));
+                assertEquals("2 2 *", Expression.convertToPostfix("2 * 2"));
             }
 
             @Test
             @DisplayName("Handles space at front")
             public void spaceFront()
             {
-                assertEquals("2 2 /", ExpressionManipulation.convertToPostfix(" 2/2"));
+                assertEquals("2 2 /", Expression.convertToPostfix(" 2/2"));
             }
 
             @Test
             @DisplayName("Handles space at end")
             public void spaceEnd()
             {
-                assertEquals("2 2 ^", ExpressionManipulation.convertToPostfix("2^2 "));
+                assertEquals("2 2 ^", Expression.convertToPostfix("2^2 "));
             }
         }
 
@@ -118,28 +117,28 @@ public class ExpressionManipulationTest
             @DisplayName("Multiplication has higher precedence than addition")
             public void addMultiply()
             {
-                assertEquals("2 3 4 * +", ExpressionManipulation.convertToPostfix("2 + 3 * 4"));
+                assertEquals("2 3 4 * +", Expression.convertToPostfix("2 + 3 * 4"));
             }
 
             @Test
             @DisplayName("Division has higher precedence than subtraction")
             public void subtractDivide()
             {
-                assertEquals("2 3 4 / -", ExpressionManipulation.convertToPostfix("2 - 3 / 4"));
+                assertEquals("2 3 4 / -", Expression.convertToPostfix("2 - 3 / 4"));
             }
 
             @Test
             @DisplayName("Exponent has higher precedence than multiplication")
             public void exponentAdd()
             {
-                assertEquals("2 3 4 ^ *", ExpressionManipulation.convertToPostfix("2 * 3 ^ 4"));
+                assertEquals("2 3 4 ^ *", Expression.convertToPostfix("2 * 3 ^ 4"));
             }
 
             @Test
             @DisplayName("() has higher precedence than ^")
             public void parenthesisExponent()
             {
-                assertEquals("2 3 + 4 ^", ExpressionManipulation.convertToPostfix("(2 + 3) ^ 4"));
+                assertEquals("2 3 + 4 ^", Expression.convertToPostfix("(2 + 3) ^ 4"));
             }
         }
     }
@@ -160,7 +159,7 @@ public class ExpressionManipulationTest
             check.addLast("+");
             check.addLast("2");
 
-            assertEquals(check, ExpressionManipulation.tokenize("2+2"));
+            assertEquals(check, Expression.tokenize("2+2"));
         }
 
         @Test
@@ -175,7 +174,7 @@ public class ExpressionManipulationTest
             check.addLast("+");
             check.addLast("2.0");
 
-            assertEquals(check, ExpressionManipulation.tokenize("2.0+2.0"));
+            assertEquals(check, Expression.tokenize("2.0+2.0"));
         }
 
         @Test
@@ -190,7 +189,7 @@ public class ExpressionManipulationTest
             check.addLast("+");
             check.addLast("2.0");
 
-            assertEquals(check, ExpressionManipulation.tokenize("2.0 + 2.0"));
+            assertEquals(check, Expression.tokenize("2.0 + 2.0"));
         }
 
         @Test
@@ -205,7 +204,7 @@ public class ExpressionManipulationTest
             check.addLast("+");
             check.addLast("2");
 
-            assertEquals(check, ExpressionManipulation.tokenize("2.0+2"));
+            assertEquals(check, Expression.tokenize("2.0+2"));
         }
 
         @Test
@@ -220,7 +219,7 @@ public class ExpressionManipulationTest
             check.addLast("+");
             check.addLast("2");
 
-            assertEquals(check, ExpressionManipulation.tokenize(" 2.0+ 2 "));
+            assertEquals(check, Expression.tokenize(" 2.0+ 2 "));
         }
 
         @Test
@@ -247,7 +246,7 @@ public class ExpressionManipulationTest
             check.addLast("3");
             check.addLast(")");
 
-            assertEquals(check, ExpressionManipulation.tokenize("(5+2.3 ) *24^0.5 -( 15 / 3)   "));
+            assertEquals(check, Expression.tokenize("(5+2.3 ) *24^0.5 -( 15 / 3)   "));
         }
 
         @Test
@@ -262,7 +261,7 @@ public class ExpressionManipulationTest
             check.addLast("+");
             check.addLast("B");
 
-            assertEquals(check, ExpressionManipulation.tokenize("A+B"));
+            assertEquals(check, Expression.tokenize("A+B"));
         }
 
         @Test
@@ -289,7 +288,7 @@ public class ExpressionManipulationTest
             check.addLast("c");
             check.addLast(")");
 
-            assertEquals(check, ExpressionManipulation.tokenize(" (A+b ) *X^y -( C / c)   "));
+            assertEquals(check, Expression.tokenize(" (A+b ) *X^y -( C / c)   "));
         }
     }
 }

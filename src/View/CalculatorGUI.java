@@ -1,6 +1,5 @@
 package src.View;
 
-import src.Model.ExpressionEvaluation;
 import src.Model.Stack;
 
 import java.awt.*;
