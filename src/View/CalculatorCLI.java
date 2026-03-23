@@ -23,7 +23,7 @@ public class CalculatorCLI
         Scanner     userInput;
 
         // Welcome user
-        System.out.println("Welcome to the Stack Calculator!");
+        System.out.println("Welcome to the Calculator!");
         System.out.println("This calculator processes infix expressions.\r\n");
 
         userInput = new Scanner(System.in);
@@ -52,7 +52,7 @@ public class CalculatorCLI
                     case "y", "Y", "yes", "Yes", "YES" -> System.out.println();
                     case "n", "N", "no", "No", "NO"    ->
                     {
-                        System.out.println("\r\nThank you for using the Stack Calculator!");
+                        System.out.println("\r\nThank you for using this Calculator!");
                         return;
                     }
                     default                            -> System.out.println("Please provide a y/n answer.");

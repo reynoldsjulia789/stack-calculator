@@ -91,11 +91,11 @@ public class CalculatorGUI extends JFrame implements ActionListener
 		btn9.addActionListener(this);
 		NumberPanel.add(btn_mult);
 		btn_mult.addActionListener(this);
-		
-		NumberPanel.add(btn0);
-		btn0.addActionListener(this);
+
 		NumberPanel.add(btn_dot);
 		btn_dot.addActionListener(this);
+		NumberPanel.add(btn0);
+		btn0.addActionListener(this);
 		NumberPanel.add(btn_del);
 		btn_del.addActionListener(this);
 		NumberPanel.add(btn_div);
