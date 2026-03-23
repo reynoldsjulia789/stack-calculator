@@ -4,6 +4,7 @@ import src.Model.Expression;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Scanner;
  */
 public class CalculatorInputFileReader
 {
-    private static double A, B, C, D, E, F, G, H, I, J;
+    private static Double A, B, C, D, E, F, G, H, I, J;
 
     /**
      * Main method.
@@ -72,7 +73,7 @@ public class CalculatorInputFileReader
     private static void EvaluateExpressionsFromFile(String inputFilePath, String outputFileName)
     {
         PrintStream fileWriter;
-        String infixExpression, postfixExpression, postfixWithValues;
+        Expression  expression, varExpression;
 
         try (Scanner fileReader = new Scanner(new File(inputFilePath)))
         {
@@ -80,29 +81,33 @@ public class CalculatorInputFileReader
 
             while (fileReader.hasNext())
             {
-
-                infixExpression = fileReader.nextLine().trim();
+                varExpression = new Expression(fileReader.nextLine().trim());
 
                 // print original infix expression
-                fileWriter.print(infixExpression + " --> ");
+                fileWriter.print(varExpression.getInfix() + " --> ");
+                System.out.print(varExpression.getInfix() + " --> ");
 
                 try
                 {
-                    // convert to postfix expression
-                    postfixExpression = Expression.convertToPostfix(infixExpression);
-
                     // print corresponding postfix expression
-                    fileWriter.print(postfixExpression + " --> ");
+                    fileWriter.print(varExpression.getPostfix() + " --> ");
+                    System.out.print(varExpression.getPostfix() + " --> ");
 
                     // replace variables in expression
-                    postfixWithValues = findAndReplaceVariables(postfixExpression);
+                    expression = new Expression(findAndReplaceVariables(varExpression.getInfix()));
+
+                    // print corresponding postfix expression
+                    fileWriter.print(expression.getPostfix() + " --> ");
+                    System.out.print(expression.getPostfix() + " --> ");
 
                     // evaluate postfix expression
-                    fileWriter.println(ExpressionEvaluation.evaluatePostfixExpression(postfixWithValues));
+                    fileWriter.println(expression.getResult());
+                    System.out.println(expression.getResult());
                 }
                 catch (Exception caught)
                 {
                     fileWriter.println(caught.getMessage());
+                    System.out.println(caught.getMessage());
                 }
             }
         }
@@ -115,37 +120,35 @@ public class CalculatorInputFileReader
     /**
      * Private helper method that replaces the variable names in an expression with the value of the variable
      * @param originalExpression the expression with variable names, tokens must be separated by whitespace
-     * @return returns a String expression with values of the variables instead of variable names
+     * @return returns a String Array List expression with values of the variables instead of variable names
      */
-    private static String findAndReplaceVariables(String originalExpression)
+    private static ArrayList<String> findAndReplaceVariables(String originalExpression)
     {
-        int           idx;
-        String[]      tokens;
-        StringBuilder newExpression;
+        int               idx;
+        String[]          tokens;
+        ArrayList<String> newExpression;
 
         tokens        = originalExpression.split("\\s+");
-        newExpression = new StringBuilder();
+        newExpression = new ArrayList<>();
 
         for (idx = 0; idx < tokens.length; idx++)
         {
             switch (tokens[idx])
             {
-                case "A" -> newExpression.append(A);
-                case "B" -> newExpression.append(B);
-                case "C" -> newExpression.append(C);
-                case "D" -> newExpression.append(D);
-                case "E" -> newExpression.append(E);
-                case "F" -> newExpression.append(F);
-                case "G" -> newExpression.append(G);
-                case "H" -> newExpression.append(H);
-                case "I" -> newExpression.append(I);
-                case "J" -> newExpression.append(J);
-                default  -> newExpression.append(tokens[idx]);
+                case "A" -> newExpression.addLast(A.toString());
+                case "B" -> newExpression.addLast(B.toString());
+                case "C" -> newExpression.addLast(C.toString());
+                case "D" -> newExpression.addLast(D.toString());
+                case "E" -> newExpression.addLast(E.toString());
+                case "F" -> newExpression.addLast(F.toString());
+                case "G" -> newExpression.addLast(G.toString());
+                case "H" -> newExpression.addLast(H.toString());
+                case "I" -> newExpression.addLast(I.toString());
+                case "J" -> newExpression.addLast(J.toString());
+                default  -> newExpression.addLast(tokens[idx]);
             }
-
-            newExpression.append(" ");
         }
 
-        return newExpression.toString().trim();
+        return newExpression;
     }
 }

@@ -23,8 +23,8 @@ public class CalculatorCLI
         Scanner     userInput;
 
         // Welcome user
-        System.out.println("Welcome to the Stack Calculator!\r\n");
-        System.out.println("This calculator processes infix expressions.");
+        System.out.println("Welcome to the Stack Calculator!");
+        System.out.println("This calculator processes infix expressions.\r\n");
 
         userInput = new Scanner(System.in);
 

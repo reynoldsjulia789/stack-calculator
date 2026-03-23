@@ -11,7 +11,7 @@ import javax.swing.*;
  * GUI Calculator
  * @author CSCD 300 homework 5/6 starter code
  */
-class CalculatorGUI extends JFrame implements ActionListener
+public class CalculatorGUI extends JFrame implements ActionListener
 {
 	private static final long serialVersionUID = 1L;
 

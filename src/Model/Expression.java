@@ -8,10 +8,11 @@ import java.util.ArrayList;
  */
 public class Expression
 {
-    private ArrayList<String> infixExpression;
-    private ArrayList<String> postfixExpression;
-    private double            result;
-    private boolean           infixUsesVariables;
+    private final ArrayList<String> infixExpression;
+    private boolean                 infixUsesVariables;
+    private ArrayList<String>       postfixExpression;
+    private double                  result;
+    private String                  postfixErrorMsg, resultErrorMsg;
 
     private enum Type
     {
@@ -34,12 +35,56 @@ public class Expression
             throw new IllegalArgumentException("expression cannot be null");
         }
 
-        this.infixExpression   = tokenize(expression);
-        this.postfixExpression = convertToPostfix();
+        this.infixExpression = tokenize(expression);
 
-        if (!infixUsesVariables)
+        this.initialize();
+    }
+
+    /**
+     * Constructor
+     * @param tokenizedExpression an array list containing an infix expression split into tokens
+     * @throws IllegalArgumentException if passed expression is null
+     */
+    public Expression(final ArrayList<String> tokenizedExpression) throws IllegalArgumentException
+    {
+        if (tokenizedExpression == null)
         {
-            this.result = evaluatePostfixExpression();
+            throw new IllegalArgumentException("expression cannot be");
+        }
+
+        this.infixExpression = new ArrayList<>(tokenizedExpression);
+
+        this.initialize();
+    }
+
+    /**
+     * Attempts to convert the expression to a postfix expression and evaluate.
+     * Stores any errors that arise.
+     */
+    private void initialize()
+    {
+        try
+        {
+            this.postfixExpression = convertToPostfix();
+            this.postfixErrorMsg   = null;
+        }
+        catch (Exception caught)
+        {
+            this.postfixErrorMsg   = caught.getMessage();
+            this.postfixExpression = null;
+        }
+
+        if (!this.infixUsesVariables && this.postfixErrorMsg == null)
+        {
+            try
+            {
+                this.result         = evaluatePostfixExpression();
+                this.resultErrorMsg = null;
+            }
+            catch (Exception caught)
+            {
+                this.resultErrorMsg = caught.getMessage();
+            }
         }
     }
 
@@ -49,7 +94,17 @@ public class Expression
      */
     public String getInfix()
     {
-        return this.infixExpression.toString();
+        int           idx;
+        StringBuilder builder;
+
+        builder = new StringBuilder();
+
+        for (idx = 0; idx < this.infixExpression.size(); idx++)
+        {
+            builder.append(this.infixExpression.get(idx)).append(" ");
+        }
+
+        return builder.toString().trim();
     }
 
     /**
@@ -58,7 +113,22 @@ public class Expression
      */
     public String getPostfix()
     {
-        return this.postfixExpression.toString();
+        int           idx;
+        StringBuilder builder;
+
+        if (this.postfixErrorMsg != null)
+        {
+            throw new ArithmeticException(this.postfixErrorMsg);
+        }
+
+        builder = new StringBuilder();
+
+        for (idx = 0; idx < this.postfixExpression.size(); idx++)
+        {
+            builder.append(this.postfixExpression.get(idx)).append(" ");
+        }
+
+        return builder.toString().trim();
     }
 
     /**
@@ -67,6 +137,21 @@ public class Expression
      */
     public double getResult()
     {
+        if (this.postfixErrorMsg != null)
+        {
+            throw new ArithmeticException(this.postfixErrorMsg);
+        }
+
+        if (this.infixUsesVariables)
+        {
+            throw new ArithmeticException("expression uses variables. Could not evaluate.");
+        }
+
+        if (this.resultErrorMsg != null)
+        {
+            throw new ArithmeticException(this.resultErrorMsg);
+        }
+
         return this.result;
     }
 
@@ -81,6 +166,11 @@ public class Expression
         ArrayList<String> tokens;
         StringBuilder     temp;
         String            expr;
+
+        if (expression == null || expression.trim().isBlank())
+        {
+            throw new IllegalArgumentException("expression is null or blank");
+        }
 
         expr       = expression.trim();
         exprLength = expr.length();
@@ -141,7 +231,7 @@ public class Expression
             token = this.infixExpression.get(idx);
 
             // write operands to postfix expression
-            if (Character.isDigit(token.charAt(0)) || isVariable(token))
+            if (isDouble(token) || isVariable(token))
             {
                 if (isVariable(token))
                 {
@@ -162,6 +252,13 @@ public class Expression
             // push ( to stack
             else if (token.equals("("))
             {
+                // if last Type was OPERAND handle as *
+                if (lastType == Type.OPERAND)
+                {
+                    // push * onto stack
+                    operators.push("*");
+                }
+
                 operators.push(token);
                 lastType = Type.LEFT_PARENTHESIS;
             }
@@ -366,10 +463,36 @@ public class Expression
 
     /**
      * To string for expression
-     * @return String in the form of "infix expression = result"
+     * @return returns a String in the form of "infix expression = result" unless there is an error or the expression
+     * uses variables, in which case "infix expression -> error" or "infix w/ variables -> postfix w/ variables"
+     * will be returned
      */
+    @Override
     public String toString()
     {
-        return this.infixExpression.toString().trim() + " = " + this.result;
+        StringBuilder builder;
+
+        builder = new StringBuilder();
+
+        builder.append(this.getInfix());
+
+        if (postfixErrorMsg != null)
+        {
+            builder.append(" -> ").append(this.postfixErrorMsg);
+        }
+        else if (infixUsesVariables)
+        {
+            builder.append(" -> ").append(this.getPostfix());
+        }
+        else if (resultErrorMsg != null)
+        {
+            builder.append(" -> ").append(this.resultErrorMsg);
+        }
+        else
+        {
+            builder.append(" = ").append(this.result);
+        }
+
+        return builder.toString();
     }
 }

@@ -34,7 +34,7 @@ public class InputProcessor
     {
         this.input.addLast(buttonValue);
 
-        return this.input.toString();
+        return this.toString();
     }
 
     /**
@@ -45,7 +45,7 @@ public class InputProcessor
     {
         this.input.removeLast();
 
-        return this.input.toString();
+        return this.toString();
     }
 
     /**
@@ -70,7 +70,7 @@ public class InputProcessor
         }
         catch (Exception caught)
         {
-            return "Error: " + caught.getMessage();
+            return caught.getMessage();
         }
     }
 
@@ -80,7 +80,7 @@ public class InputProcessor
      */
     public String getLastExpression()
     {
-        return this.history.getFirst().getInfix();
+        return this.history.getFirst().toString();
     }
 
     /**
@@ -89,6 +89,16 @@ public class InputProcessor
      */
     public String toString()
     {
-        return this.input.toString();
+        int           idx;
+        StringBuilder builder;
+
+        builder = new StringBuilder();
+
+        for (idx = 0; idx < this.input.size(); idx++)
+        {
+            builder.append(this.input.get(idx)).append(" ");
+        }
+
+        return builder.toString().trim();
     }
 }
